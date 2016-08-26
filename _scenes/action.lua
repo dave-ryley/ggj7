@@ -1,6 +1,7 @@
 local composer = require( "composer" )
 local playerBuild = require("playerBuild")
 local enemyBuild = require("enemyBuild")
+local widget = require("widget")
 require ("attacks")
 local scene = composer.newScene()
 
@@ -23,6 +24,26 @@ function scene:create( event )
 	backdrop.x = dccx
 	backdrop.y = dccy
 	canPress = true
+
+	-- Creating the attack options panel
+
+	local scrollView = widget.newScrollView
+	{
+		left = 70,
+		top = 70,
+		width = 500,
+		height = 200,
+		topPadding = 20,
+		bottomPadding = 20,
+		horizontalScrollDisabled = true,
+		verticalScrollDisabled = false,
+		listener = scrollListener,
+	}
+
+	buttons = spawnButtons()
+	scrollView:insert(buttons)
+
+
 end
 
 -- "scene:show()"
@@ -79,6 +100,14 @@ local function onKeyPress( event )
 
 	return false
 end
+
+local function scrollListener( event )
+	local phase = event.phase
+	local direction = event.direction
+
+	return true
+end
+
 Runtime:addEventListener( "key", onKeyPress )
 scene:addEventListener( "create", scene )
 scene:addEventListener( "show", scene )

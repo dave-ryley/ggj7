@@ -7,3 +7,24 @@ function spawnPlayer()
 	player.stats = playerStats
 	return player
 end
+
+function buttonPress( self, event )
+	if event.phase == "began" then
+		print(self.id)
+		return true
+	end
+end
+
+function spawnButtons()
+	buttons = display.newGroup()
+	buttons.x, buttons.y = 50, 50
+	for i = 1, #currentAbilities do
+		buttons[currentAbilities[i]] = display.newText( buttons, currentAbilities[i], 0, 50*(i-1), 300, 50, "Pixeled Regular", 14, "left" )
+		buttons[currentAbilities[i]].anchorX = 0
+		buttons[currentAbilities[i]]:setTextColor( 0 )
+		buttons[currentAbilities[i]].id = currentAbilities[i]
+		buttons[currentAbilities[i]].touch = buttonPress
+		buttons[currentAbilities[i]]:addEventListener( "touch", buttons[currentAbilities[i]] )
+	end
+	return buttons
+end
