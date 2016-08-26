@@ -108,6 +108,17 @@ local function scrollListener( event )
 	return true
 end
 
+function buttonPress( self, event )
+	if event.phase == "began" then
+		attack(player, enemy, self.id, 1)
+		return true
+	end
+end
+
+local function do_action( id )
+	attack(player, enemy, id, 1)
+end
+
 Runtime:addEventListener( "key", onKeyPress )
 scene:addEventListener( "create", scene )
 scene:addEventListener( "show", scene )
