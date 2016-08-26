@@ -3,12 +3,15 @@ local playerBuild = require("playerBuild")
 local enemyBuild = require("enemyBuild")
 local widget = require("widget")
 require ("attacks")
+require ("_data.attackTypes")
 local scene = composer.newScene()
 
 local backdrop
 local player
 local enemy
 local scrollView
+local at_options
+local announcementText
 
 -- "scene:create()"
 function scene:create( event )
@@ -21,6 +24,18 @@ function scene:create( event )
 	enemyHealth = makeHealthBar(1, g_enemy)
 	backdrop.x = dccx
 	backdrop.y = dccy
+
+	at_options = {
+		text = "",
+		font = "VCR OSD Mono",
+		fontSize = 50,
+		width = 1000,
+		align = "center",
+		x = dccx,
+		y = dccy - 100,
+	}
+
+	announcementText = create_shadowed_text( at_options )
 
 	-- Creating the attack options panel
 
@@ -37,10 +52,9 @@ function scene:create( event )
 		listener = scrollListener,
 	}
 
-	buttons = spawnButtons()
+	local buttons = spawnButtons()
 	scrollView:insert(buttons)
-
-
+	
 end
 
 -- "scene:show()"
@@ -118,14 +132,31 @@ function playerTurn( id )
 		y = -300, 
 		delta = true, 
 		onComplete = function()
-			announce(g_playerName, id)
+			calculateDamage(id, "player")
+			announceAttack(g_playerName, id)
 			attack(player, enemy, id, 1)
 		end} )
-	
+	timer.performWithDelay( 1000, updateHealthBars )
 end
 
-function announce( name, id )
+function calculateDamage(id, attacker)
+	local roll = math.random(20)
+	if attacker == "player" then
+		local damage = attackTypes[id].damage*player.stats.attack*roll/20
+		enemy.stats.health = enemy.stats.health - damage
+	else
+		local damage = attackTypes[id].damage*enemy.stats.attack*roll/20
+		player.stats.health = player.stats.health - damage
+	end
+end
 
+function updateHealthBars()
+	transition.scaleTo( playerHealth.bar, { xScale=player.stats.health/player.stats.maxHealth, yScale=1, time=200 } )
+	transition.scaleTo( enemyHealth.bar, { xScale=enemy.stats.health/enemy.stats.maxHealth, yScale=1, time=200 } )
+end
+
+function announceAttack( name, id )
+	announcementText:setText(name .. " used " .. id)
 end
 
 

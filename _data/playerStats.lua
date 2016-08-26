@@ -2,7 +2,9 @@ playerStats = {
 
 	name = "",
 	health = 100,
-	level = 0
+	maxHealth = 100,
+	level = 0,
+	attack = 10
 
 }
 

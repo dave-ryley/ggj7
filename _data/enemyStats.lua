@@ -2,6 +2,7 @@ enemyStats = {
 	[ "enemy1" ] = {
 
 		health = 100,
+		maxHealth = 100,
 		attack = 20,
 
 	},
