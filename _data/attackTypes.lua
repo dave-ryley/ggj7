@@ -1,0 +1,3 @@
+attackTypes = {
+	["melee"] = {},
+}

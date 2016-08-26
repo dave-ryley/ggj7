@@ -1,10 +1,28 @@
 local composer = require( "composer" )
+local playerBuild = require("playerBuild")
+local enemyBuild = require("enemyBuild")
+require ("attacks")
 local scene = composer.newScene()
+
+local backdrop
+local player
+local enemy
+
+-- Temp
+local canPress
 
 -- "scene:create()"
 function scene:create( event )
 	local sceneGroup = self.view
-	-- Create the particle system
+	-- set the background based on the background set in globals
+	backdrop = display.newImageRect((backdrops_gfx_directory .. g_backdrop .. ".jpg"), 1280, 720 )
+	player = spawnPlayer()
+	enemy = spawnEnemy()
+	playerHealth = makeHealthBar(0, g_playerName)
+	enemyHealth = makeHealthBar(1, g_enemy)
+	backdrop.x = dccx
+	backdrop.y = dccy
+	canPress = true
 end
 
 -- "scene:show()"
@@ -21,6 +39,7 @@ function scene:show( event )
 	-- Called when the scene is now on screen.
 	-- Insert code here to make the scene come alive.
 	-- Example: start timers, begin animation, play audio, etc.
+
 	end
 end
 
@@ -54,8 +73,8 @@ local function onKeyPress( event )
 	local phase = event.phase
 	local keyName = event.keyName
 
-	if (phase == "down" and sceneActive == true) then
-		change_scene( scenes_directory .. ".story", 1000, {} )
+	if (phase == "down" and canPress) then
+		attack(player, enemy, "basic strike", 1)
 	end
 
 	return false

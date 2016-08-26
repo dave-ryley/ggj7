@@ -6,7 +6,21 @@ scenes_directory = "_scenes"
 sfx_directory = "_sfx"
 utils_directory = "_utils"
 
+-- Action Scene gfx directories
+backdrops_gfx_directory = (gfx_directory .. "/action/backdrops/")
+players_gfx_directory = (gfx_directory .. "/action/players/")
+enemies_gfx_directory = (gfx_directory .. "/action/enemies/")
+
 dcw = display.contentWidth
 dch = display.contentHeight
 dccx = display.contentCenterX
 dccy = display.contentCenterY
+
+-- Customization --
+g_playerName = "Bobby"
+
+-- Action Scene --
+
+g_backdrop = "snowy"
+g_player = "player1"
+g_enemy = "enemy1"
