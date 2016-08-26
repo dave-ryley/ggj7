@@ -1,4 +1,5 @@
 
+-- All attacks should be under 1000 ms
 function attack( attacker, attacked, attackType, direction )
 	attackAnimation[attackType]( attacker, attacked, direction )
 end

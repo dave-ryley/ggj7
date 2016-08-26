@@ -12,6 +12,7 @@ local enemy
 local scrollView
 local at_options
 local announcementText
+local currentTurn
 
 -- "scene:create()"
 function scene:create( event )
@@ -24,6 +25,7 @@ function scene:create( event )
 	enemyHealth = makeHealthBar(1, g_enemy)
 	backdrop.x = dccx
 	backdrop.y = dccy
+	currentTurn = "player"
 
 	at_options = {
 		text = "",
@@ -136,7 +138,18 @@ function playerTurn( id )
 			announceAttack(g_playerName, id)
 			attack(player, enemy, id, 1)
 		end} )
-	timer.performWithDelay( 1000, updateHealthBars )
+	timer.performWithDelay( 1000, endTurn )
+end
+
+function enemyTurn()
+	announceAttack(g_enemy, enemy.strategy[enemy.currentAttack])
+	calculateDamage(enemy.strategy[enemy.currentAttack], "enemy")
+	attack(enemy, player, enemy.strategy[enemy.currentAttack], -1)
+	enemy.currentAttack = enemy.currentAttack + 1
+	if (enemy.currentAttack > #enemy.strategy) then
+		enemy.currentAttack = 1
+	end
+	timer.performWithDelay( 1000, endTurn )
 end
 
 function calculateDamage(id, attacker)
@@ -150,9 +163,20 @@ function calculateDamage(id, attacker)
 	end
 end
 
-function updateHealthBars()
+function endTurn()
+	announcementText:setText("")
 	transition.scaleTo( playerHealth.bar, { xScale=player.stats.health/player.stats.maxHealth, yScale=1, time=200 } )
 	transition.scaleTo( enemyHealth.bar, { xScale=enemy.stats.health/enemy.stats.maxHealth, yScale=1, time=200 } )
+	if(currentTurn == "player") then
+		currentTurn = "enemy"
+		timer.performWithDelay( 1000, enemyTurn )
+	else
+		currentTurn = "player"
+		transition.to( scrollView, { 
+		time = 400, 
+		y = 300, 
+		delta = true } )
+	end
 end
 
 function announceAttack( name, id )

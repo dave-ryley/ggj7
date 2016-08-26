@@ -4,7 +4,7 @@ playerStats = {
 	health = 100,
 	maxHealth = 100,
 	level = 0,
-	attack = 10
+	attack = 4
 
 }
 
