@@ -8,9 +8,7 @@ local scene = composer.newScene()
 local backdrop
 local player
 local enemy
-
--- Temp
-local canPress
+local scrollView
 
 -- "scene:create()"
 function scene:create( event )
@@ -23,11 +21,10 @@ function scene:create( event )
 	enemyHealth = makeHealthBar(1, g_enemy)
 	backdrop.x = dccx
 	backdrop.y = dccy
-	canPress = true
 
 	-- Creating the attack options panel
 
-	local scrollView = widget.newScrollView
+	scrollView = widget.newScrollView
 	{
 		left = 70,
 		top = 70,
@@ -94,7 +91,7 @@ local function onKeyPress( event )
 	local phase = event.phase
 	local keyName = event.keyName
 
-	if (phase == "down" and canPress) then
+	if (phase == "down") then
 		attack(player, enemy, "basic strike", 1)
 	end
 
@@ -110,16 +107,29 @@ end
 
 function buttonPress( self, event )
 	if event.phase == "began" then
-		attack(player, enemy, self.id, 1)
+		playerTurn(self.id)
 		return true
 	end
 end
 
-local function do_action( id )
-	attack(player, enemy, id, 1)
+function playerTurn( id )
+	transition.to( scrollView, { 
+		time = 400, 
+		y = -300, 
+		delta = true, 
+		onComplete = function()
+			announce(g_playerName, id)
+			attack(player, enemy, id, 1)
+		end} )
+	
 end
 
-Runtime:addEventListener( "key", onKeyPress )
+function announce( name, id )
+
+end
+
+
+--Runtime:addEventListener( "key", onKeyPress )
 scene:addEventListener( "create", scene )
 scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
