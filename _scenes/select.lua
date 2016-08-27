@@ -1,4 +1,5 @@
 local composer = require "composer"
+require "_utils.utils"
 local widget = require "widget"
 local scene = composer.newScene()
 local scale = 2
@@ -24,14 +25,47 @@ local scrollView = nil
 -- the scene is removed entirely (not recycled) via "composer.removeScene()"
 -- -----------------------------------------------------------------------------------
 
+local function selectBackground()
+	local sdcw = selected_display.contentWidth
+	local sdch = selected_display.contentHeight
+	selected_display.x = button_size
+	local background = display.newImageRect(
+			(backdrops_gfx_directory .. "background".. selected_bg .. ".jpg"), 
+			sdcw, sdch --[[*3/4--]])
+	background.x = sdcw/2
+	background.y = sdch/2 --[[*3/8--]]
+	selected_display:insert( 1, background )
+end
+
 
 local function handleButtonEvent( event )
 
     if ( "ended" == event.phase ) then
-        print( "Button was pressed and released" )
-        g_player = "player"..selection
-        g_player_number = selection
-        composer.gotoScene( scenes_directory .. ".action")
+    	local label = event.target:getLabel( )
+    	--print(label)
+    	--print_r(event)
+    	if label == "LEFT" then
+			if selected_bg > 1 then
+				selected_bg = selected_bg - 1
+				selected_display[1]:removeSelf( )
+				selectBackground()
+			end
+    	end
+    	if label == "RIGHT" then
+    		if selected_bg < g_total_backdrops then
+				selected_bg = selected_bg + 1
+				selected_display[1]:removeSelf( )
+				selectBackground()
+			end
+    	end
+    	if label == "GO" then
+			print( "Button was pressed and released" )
+			g_player = "player"..selection
+			g_player_number = selection
+			g_backdrop = selected_bg
+			composer.gotoScene( scenes_directory .. ".action")
+    	end
+        
     end
 end
 
@@ -66,7 +100,7 @@ local function scrollListener( event )
 				--Display large selected character sprite/animation
 				local s = display.newImage( 		
 					selected_string, 
-					selected_display.contentWidth/5 - 50, 
+					selected_display.contentWidth*2/11, 
 					selected_display.contentHeight*6/8 )
 				selected_display:insert(3, s)
 				s:scale(1.5, 1.5)
@@ -81,7 +115,7 @@ local function scrollListener( event )
 end
 
 
-local function createButton()
+local function createButtons()
 	local go_button = widget.newButton(
 		{
 			width =  300,
@@ -95,6 +129,34 @@ local function createButton()
 	go_button.x = selected_display.contentWidth*3/7
 	go_button.y = selected_display.contentHeight*6/7
 	selected_display:insert(2, go_button)
+
+	local left_button = widget.newButton(
+		{
+			width =  150,
+			height = 50,
+			defaultFile = ui_gfx_directory.."buttons/go_button1.png",
+			overFile = ui_gfx_directory.."buttons/go_button2.png",
+			label = "LEFT",
+			onEvent = handleButtonEvent
+		}
+	)
+	left_button.x = selected_display.contentWidth*3/8
+	left_button.y = selected_display.contentHeight/8
+	selected_display:insert(5, left_button)
+
+	local right_button = widget.newButton(
+		{
+			width =  150,
+			height = 50,
+			defaultFile = ui_gfx_directory.."buttons/go_button1.png",
+			overFile = ui_gfx_directory.."buttons/go_button2.png",
+			label = "RIGHT",
+			onEvent = handleButtonEvent
+		}
+	)
+	right_button.x = selected_display.contentWidth*5/8
+	right_button.y = selected_display.contentHeight/8
+	selected_display:insert(6, right_button)
 end
 
 local function createScrollView()
@@ -127,18 +189,12 @@ local function createScrollView()
 
 end
 
+
+
 local function createSelectedDisplay()
 	selected_display.contentWidth = dcw - button_size
 	selected_display.contentHeight = dch
-	local sdcw = selected_display.contentWidth
-	local sdch = selected_display.contentHeight
-	selected_display.x = button_size
-	local background = display.newImageRect(
-			(backdrops_gfx_directory .. "background".. selected_bg .. ".jpg"), 
-			sdcw, sdch*3/4 )
-	background.x = sdcw/2
-	background.y = sdch*3/8
-	selected_display:insert( 1, background )
+	selectBackground()
 end
 
 
@@ -183,7 +239,7 @@ function scene:show( event )
 
         createSelectedDisplay()
         createScrollView()
-        createButton()
+        createButtons()
     elseif ( phase == "did" ) then
         -- Code here runs when the scene is entirely on screen
 
