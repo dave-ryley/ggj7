@@ -5,4 +5,4 @@ local composer = require "composer"
 
 native.setProperty("windowMode", "fullscreen")
 
-composer.gotoScene( scenes_directory .. ".select")
+composer.gotoScene( scenes_directory .. ".menu")

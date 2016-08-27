@@ -7,8 +7,7 @@ local display_group = nil
 local function handleButtonEvent( event )
 
     if ( "ended" == event.phase ) then
-    	composer.removeScene( scenes_directory .. ".win", false )
-		composer.gotoScene( scenes_directory .. ".menu")
+		composer.gotoScene( scenes_directory .. ".select")
     end
 end
 -- -----------------------------------------------------------------------------------
@@ -32,15 +31,12 @@ function scene:show( event )
 
     if ( phase == "will" ) then
         -- Code here runs when the scene is still off screen (but is about to come on screen)
-
-		announcementText:setText("You Win!")
         display_group = display.newGroup( )
-        local string =  players_gfx_directory.."player"..g_player_number..".png"
-        display.newImage( display_group,  string, dcw/2, dch/2, true )
+        --display.newImage( display_group,  string, dcw/2, dch/2, true )
         local button = widget.newButton(
 			{
-				width =  150,
-				height = 50,
+				width =  300,
+				height = 100,
 				defaultFile = ui_gfx_directory.."buttons/go_button1.png",
 				overFile = ui_gfx_directory.."buttons/go_button2.png",
 				label = "",
@@ -65,6 +61,8 @@ function scene:hide( event )
 
 	if ( phase == "will" ) then
 		-- Code here runs when the scene is on screen (but is about to go off screen)
+		display_group:removeSelf( )
+		scene:destroy()
 
 	elseif ( phase == "did" ) then
 		-- Code here runs immediately after the scene goes entirely off screen
@@ -78,8 +76,7 @@ function scene:destroy( event )
 
     local sceneGroup = self.view
     -- Code here runs prior to the removal of scene's view
-    announcementText:setText("")
-    display_group:removeSelf( )
+
 end
 
 

@@ -11,7 +11,6 @@ local player
 local enemy
 local scrollView
 local at_options
-local announcementText
 local currentTurn
 local gameOver
 local criticalHit

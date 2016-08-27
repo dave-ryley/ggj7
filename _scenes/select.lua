@@ -31,41 +31,45 @@ local function selectBackground()
 	selected_display.x = button_size
 	local background = display.newImageRect(
 			(backdrops_gfx_directory .. "background".. selected_bg .. ".jpg"), 
-			sdcw, sdch --[[*3/4--]])
+			sdcw*1.5, sdch*1.5*3/4 --[[*3/4--]])
 	background.x = sdcw/2
-	background.y = sdch/2 --[[*3/8--]]
+	background.y = sdch*3/8 --[[/2--]]
 	selected_display:insert( 1, background )
 end
 
 
-local function handleButtonEvent( event )
+local function handleButtonLeft( event )
 
     if ( "ended" == event.phase ) then
-    	local label = event.target:getLabel( )
-    	if label == "LEFT" then
-			if selected_bg > 1 then
-				selected_bg = selected_bg - 1
-				selected_display[1]:removeSelf( )
-				selectBackground()
-			end
-    	end
-    	if label == "RIGHT" then
-    		if selected_bg < g_total_backdrops then
-				selected_bg = selected_bg + 1
-				selected_display[1]:removeSelf( )
-				selectBackground()
-			end
-    	end
-    	if label == "GO" then
-			print( "Button was pressed and released" )
-			g_player = "player"..selection
-			g_player_number = selection
-			g_backdrop = selected_bg
-			composer.gotoScene( scenes_directory .. ".action")
-    	end
-        
+		if selected_bg > 1 then
+			selected_bg = selected_bg - 1
+			selected_display[1]:removeSelf( )
+			selectBackground()
+		end
     end
 end
+
+local function handleButtonRight( event )
+	if ( "ended" == event.phase ) then
+		if selected_bg < g_total_backdrops then
+			selected_bg = selected_bg + 1
+			selected_display[1]:removeSelf( )
+			selectBackground()
+		end
+	end
+end
+
+local function handleButtonGo( event )
+	if ( "ended" == event.phase ) then
+		print( "Button was pressed and released" )
+		g_player = "player"..selection
+		g_player_number = selection
+		g_backdrop = selected_bg
+		composer.gotoScene( scenes_directory .. ".action")
+	end
+end
+
+
 
 local function init()
 	selected_display = display.newGroup( )
@@ -86,7 +90,6 @@ local function scrollListener( event )
 
 			selection = math.ceil((event.y - y)/button_size)
 			--print(tiles_list[selection].name)
-			createStatBox()
 			if selection <= numPlayers then
 				if selected_display.numChildren > 4 then
 					selected_display[5]:removeSelf( )
@@ -109,6 +112,7 @@ local function scrollListener( event )
 					selected_display.contentWidth*2/11, 
 					selected_display.contentHeight*6/8 )
 				selected_display:insert(5, s)
+				createStatBox()
 				s:scale(1.5, 1.5)
 			end
 
@@ -127,8 +131,8 @@ local function createButtons()
 			height = 100,
 			defaultFile = ui_gfx_directory.."buttons/go_button1.png",
 			overFile = ui_gfx_directory.."buttons/go_button2.png",
-			label = "GO",
-			onEvent = handleButtonEvent
+			label = "",
+			onEvent = handleButtonGo
 		}
 	)
 	go_button.x = selected_display.contentWidth*3/7
@@ -137,12 +141,12 @@ local function createButtons()
 
 	local left_button = widget.newButton(
 		{
-			width =  150,
-			height = 50,
-			defaultFile = ui_gfx_directory.."buttons/go_button1.png",
-			overFile = ui_gfx_directory.."buttons/go_button2.png",
-			label = "LEFT",
-			onEvent = handleButtonEvent
+			width =  200,
+			height = 75,
+			defaultFile = ui_gfx_directory.."buttons/left_button1.png",
+			overFile = ui_gfx_directory.."buttons/left_button2.png",
+			label = "",
+			onEvent = handleButtonLeft
 		}
 	)
 	left_button.x = selected_display.contentWidth*3/8
@@ -151,12 +155,12 @@ local function createButtons()
 
 	local right_button = widget.newButton(
 		{
-			width =  150,
-			height = 50,
-			defaultFile = ui_gfx_directory.."buttons/go_button1.png",
-			overFile = ui_gfx_directory.."buttons/go_button2.png",
-			label = "RIGHT",
-			onEvent = handleButtonEvent
+			width =  200,
+			height = 75,
+			defaultFile = ui_gfx_directory.."buttons/right_button1.png",
+			overFile = ui_gfx_directory.."buttons/right_button2.png",
+			label = "",
+			onEvent = handleButtonRight
 		}
 	)
 	right_button.x = selected_display.contentWidth*5/8
@@ -215,8 +219,8 @@ function createStatBox()
 		i = i + 1
 	end
 	stat_display.x = selected_display.contentWidth*5/7
-	stat_display.y = selected_display.contentHeight*5/6
-	selected_display:insert( 11, stat_display )
+	stat_display.y = selected_display.contentHeight*9/11
+	selected_display:insert( stat_display )
 end
 
 
