@@ -11,7 +11,6 @@ local player
 local enemy
 local scrollView
 local at_options
-local announcementText
 local currentTurn
 local gameOver
 local criticalHit
@@ -226,13 +225,9 @@ function calculateDamage(id, attacker)
 	end
 end
 
-function win( player )
-	announcementText:setText( player .. " wins!")
-	gameOver = true
-end
 
 function win( player )
-	announcementText:setText( player .. " wins!")
+	--announcementText:setText( player .. " wins!")
 	gameOver = true
 	composer.gotoScene(  scenes_directory .. ".win" )
 end
