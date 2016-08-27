@@ -150,7 +150,7 @@ function chargeButtonEvent(event)
 		hideChargeButton()
 		return true
 	end
-	
+
 end
 
 function createChargeButton()
@@ -183,8 +183,8 @@ function buttonPress( self, event )
 
 	if event.phase == "began" then
 		print(self.id)
-		--if playerCharge == 100 then 
-		--	hideChargeButton() 
+		--if playerCharge == 100 then
+		--	hideChargeButton()
 		--end
 		playerTurn(self.id)
 		return true
@@ -237,7 +237,7 @@ function calculateDamage(id, attacker)
 
 		playerCharge = math.floor(playerCharge) + attackTypes[id].powerUp
 
-		if playerCharge >= 100 then 
+		if playerCharge >= 100 then
 			playerCharge = 100
 		end
 		if playerCharge <= 0 then playerCharge = 0.001 end
