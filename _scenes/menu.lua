@@ -16,6 +16,7 @@ end
 
 local background
 local title
+local display_group
 
 -- create()
 function scene:create( event )
@@ -26,6 +27,8 @@ function scene:create( event )
     background.x, background.y = dccx, dccy
     title = display.newImageRect( sceneGroup, "_gfx/ui/title.png", 724, 259 )
     title.x, title.y = dccx, dccy
+    display_group = display.newGroup( )
+    sceneGroup:insert( display_group )
 
 end
 
@@ -38,7 +41,6 @@ function scene:show( event )
 
     if ( phase == "will" ) then
         -- Code here runs when the scene is still off screen (but is about to come on screen)
-        display_group = display.newGroup( )
         --display.newImage( display_group,  string, dcw/2, dch/2, true )
         local button = widget.newButton(
 			{
@@ -68,7 +70,7 @@ function scene:hide( event )
 
 	if ( phase == "will" ) then
 		-- Code here runs when the scene is on screen (but is about to go off screen)
-		display_group:removeSelf( )
+		--display_group:removeSelf( )
 		scene:destroy()
 
 	elseif ( phase == "did" ) then

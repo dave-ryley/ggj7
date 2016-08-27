@@ -18,7 +18,7 @@ dccx = display.contentCenterX
 dccy = display.contentCenterY
 
 -- Customization --
-g_playerName = "Dave"
+g_playerName = "Player 1"
 
 -- Action Scene --
 
@@ -28,3 +28,4 @@ g_player = "player1"
 g_player_number = 1
 g_enemy = 1
 g_total_players = 3
+g_win = false

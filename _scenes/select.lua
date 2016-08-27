@@ -273,24 +273,25 @@ function createStatBox()
 	end
 
 	--]]
+	display.newImageRect( stat_display, "_gfx/ui/panel.png", 400, 180 )
 	--display health
-	display.newText( stat_display, "Health:", 0, 20*(i), 300, 50, "Pixeled.ttf", 14, "left" )
-	display.newText( stat_display, stats.maxHealth, 150, 20*(i), 300, 50, "Pixeled.ttf", 14, "left" )
+	display.newText( stat_display, "Health:", 0, 20*(i)-40, 300, 50, "Pixeled.ttf", 14, "left" )
+	display.newText( stat_display, stats.maxHealth, 150, 20*(i)-40, 300, 50, "Pixeled.ttf", 14, "left" )
 	i = i + 1
 	--display attack
-	display.newText( stat_display, "Attack:", 0, 20*(i), 300, 50, "Pixeled.ttf", 14, "left" )
-	display.newText( stat_display, stats.attack, 150, 20*(i), 300, 50, "Pixeled.ttf", 14, "left" )
+	display.newText( stat_display, "Attack:", 0, 20*(i)-40, 300, 50, "Pixeled.ttf", 14, "left" )
+	display.newText( stat_display, stats.attack, 150, 20*(i)-40, 300, 50, "Pixeled.ttf", 14, "left" )
 	i = i + 1
 	--display defense
-	display.newText( stat_display, "Defense:", 0, 20*(i), 300, 50, "Pixeled.ttf", 14, "left" )
-	display.newText( stat_display, stats.defense, 150, 20*(i), 300, 50, "Pixeled.ttf", 14, "left" )
+	display.newText( stat_display, "Defense:", 0, 20*(i)-40, 300, 50, "Pixeled.ttf", 14, "left" )
+	display.newText( stat_display, stats.defense, 150, 20*(i)-40, 300, 50, "Pixeled.ttf", 14, "left" )
 	i = i + 1
 	--display dodge
-	display.newText( stat_display, "Dodge:", 0, 20*(i), 300, 50, "Pixeled.ttf", 14, "left" )
-	display.newText( stat_display, stats.dodgeChance, 150, 20*(i), 300, 50, "Pixeled.ttf", 14, "left" )
+	display.newText( stat_display, "Dodge:", 0, 20*(i)-40, 300, 50, "Pixeled.ttf", 14, "left" )
+	display.newText( stat_display, stats.dodgeChance, 150, 20*(i)-40, 300, 50, "Pixeled.ttf", 14, "left" )
 	i = i + 1
 
-	stat_display.x = selected_display.contentWidth*5/7
+	stat_display.x = selected_display.contentWidth*5/7 + 50
 	stat_display.y = selected_display.contentHeight*9/11
 	selected_display:insert( stat_display )
 end

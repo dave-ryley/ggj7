@@ -32,17 +32,20 @@ function scene:show( event )
 
     if ( phase == "will" ) then
         -- Code here runs when the scene is still off screen (but is about to come on screen)
-
-		announcementText:setText("You Win!")
+        if(g_win) then
+			announcementText:setText("You Win!")
+		else
+			announcementText:setText("You Lose!")
+		end
         display_group = display.newGroup( )
         local string =  players_gfx_directory.."player"..g_player_number..".png"
         display.newImage( display_group,  string, dcw/2, dch/2, true )
         local button = widget.newButton(
 			{
-				width =  150,
-				height = 50,
-				defaultFile = ui_gfx_directory.."buttons/go_button1.png",
-				overFile = ui_gfx_directory.."buttons/go_button2.png",
+				width =  300,
+				height = 100,
+				defaultFile = ui_gfx_directory.."buttons/menu_button1.png",
+				overFile = ui_gfx_directory.."buttons/menu_button2.png",
 				label = "",
 				onEvent = handleButtonEvent
 			}

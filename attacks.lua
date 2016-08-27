@@ -43,7 +43,7 @@ function leapAttack( obj, attacked, direction )
   transition_curve(obj,curve,{ time = 400, speed = 0.1, onComplete = function()
 		transition.to(obj,{time = 70, x = attacked.x,y = attacked.y,onComplete = function()
       transition.to( obj, { time = 300, x = returnpoint[1], y = returnpoint[2]})
-			audio.play(basicAttackSound,{channel = 1,duration = 1000})
+			audio.play(basicAttackSound)
       do_shake_obj( attacked, 3 )
 			scream()
 		end } )
@@ -87,7 +87,18 @@ end
 
 function CHARGE(obj, attacked, direction)
 	local origin = obj.x
-	local lance = display.newImageRect(obj,"_gfx/action/healthbar"..1-direction..".png",300,20)
+	local lance = display.newImageRect(obj,"_gfx/action/players/lance"..1+direction..".png",544,56)
+	lance.fill.effect = "filter.brightness"
+	lance.fill.effect.intensity = 1
+	lance.alpha = 0
+	lance.anchorX = direction*-1
+	lance.x = -66*direction
+	lance.y = -56
+
+		transition.to(lance, {time = 200, alpha = 1, onComplete = function()
+			transition.to(lance.fill.effect, {time = 200,intensity = 0 })
+			end } )
+
 		transition.to( obj, { time = 500, x = 300*direction, delta = true, onComplete = function( )
 				transition.to( obj, { time = 50, x = 300*direction, delta = true, onComplete = function( )
 						audio.play(basicAttackSound)
