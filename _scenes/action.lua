@@ -158,8 +158,8 @@ function createChargeButton()
 			{
 				width =  300,
 				height = 100,
-				defaultFile = ui_gfx_directory.."buttons/go_button1.png",
-				overFile = ui_gfx_directory.."buttons/go_button2.png",
+				defaultFile = ui_gfx_directory.."buttons/charge_button1.png",
+				overFile = ui_gfx_directory.."buttons/charge_button2.png",
 				onEvent = chargeButtonEvent
 			}
 		)
