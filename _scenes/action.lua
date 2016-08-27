@@ -179,6 +179,7 @@ end
 function buttonPress( self, event )
 
 	if event.phase == "began" then
+		print(self.id)
 		if playerCharge == 100 then 
 			hideChargeButton() 
 		end
