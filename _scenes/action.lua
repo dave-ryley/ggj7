@@ -27,7 +27,7 @@ function scene:create( event )
 	player = spawnPlayer()
 	enemy = spawnEnemy()
 	playerHealth = makeHealthBar(0, g_playerName)
-	enemyHealth = makeHealthBar(1, g_enemy)
+	enemyHealth = makeHealthBar(1, enemy.stats.name)
 	enemyCharge = 0.001
 	playerCharge = 0.001
 	backdrop.x = dccx

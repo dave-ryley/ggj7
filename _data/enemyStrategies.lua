@@ -4,7 +4,7 @@ strategies = {
 		{"Basic Strike"},{"Basic Strike"},{"Basic Strike"},{"Basic Strike"},{"Leap Attack"}
 	},
 	{
-		{"GroundPound"},
+		{"Ground Pound"},
 	},
 	{
 		{"Basic Strike"},
