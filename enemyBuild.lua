@@ -26,15 +26,19 @@ function makeHealthBar( playerOrEnemy, name )
 	healthBar.bar = display.newRect( healthBar, 0, 0, 300, 29 )
 	healthBar.bar:setFillColor( 0, 1, 0 )
 	healthBar.bar.anchorX = playerOrEnemy
+	healthBar.power = display.newRect( healthBar, 0, 0, 300, 17 )
+	healthBar.power:setFillColor( 0.2, 0.7, 1 )
+	healthBar.power.anchorX = playerOrEnemy
 	if (playerOrEnemy == 1) then
 		name.align = "right"
-		healthBar.bar.x, name.x = -20, -20
+		healthBar.bar.x, name.x, healthBar.power.x = -20, -20, -20
 		healthBar.x = dcw - 50
 	else
-		healthBar.bar.x, name.x = 20, 20
+		healthBar.bar.x, healthBar.power.x, name.x = 20, 20, 20
 		healthBar.x = 50
 	end
 	healthBar.bar.y = -2
+	healthBar.power.y = 32
 	healthBar.y = dch - 100
 	healthBar.anchorY = 1
 	return healthBar

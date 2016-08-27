@@ -31,7 +31,7 @@ local function selectBackground()
 	selected_display.x = button_size
 	local background = display.newImageRect(
 			(backdrops_gfx_directory .. "background".. selected_bg .. ".jpg"), 
-			sdcw, sdch --[[*3/4--]])
+			sdcw*1.5, sdch*1.5 --[[*3/4--]])
 	background.x = sdcw/2
 	background.y = sdch/2 --[[*3/8--]]
 	selected_display:insert( 1, background )
