@@ -1,4 +1,4 @@
-require (data_directory .. ".enemyStats")
+local enemyStats = require (data_directory .. ".playerStats")
 require (data_directory .. ".enemyStrategies")
 function spawnEnemy()
 	enemy = display.newGroup()
@@ -8,7 +8,7 @@ function spawnEnemy()
 	enemyGraphic = display.newImageRect(enemy, (enemies_gfx_directory .. "enemy"..g_enemy .. ".png"), 170, 170 )
 	enemy.x = dcw - 300 
 	enemy.y = dch - 300
-	enemy.stats = enemyStats[g_enemy]
+	enemy.stats = enemyStats[g_enemy].stats
 	enemy.stats.health = enemy.stats.maxHealth
 	local roll = math.random(#strategies)
 	enemy.strategy = strategies[roll]

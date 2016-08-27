@@ -19,7 +19,6 @@ local dodged
 local enemyCharge
 local playerCharge
 local chargeButton
-
 -- "scene:create()"
 function scene:create( event )
 	local sceneGroup = self.view
@@ -29,8 +28,8 @@ function scene:create( event )
 	enemy = spawnEnemy()
 	playerHealth = makeHealthBar(0, g_playerName)
 	enemyHealth = makeHealthBar(1, g_enemy)
-	enemyCharge = 1
-	playerCharge = 1
+	enemyCharge = 0.001
+	playerCharge = 0.001
 	backdrop.x = dccx
 	backdrop.y = dccy
 	currentTurn = "player"
@@ -219,7 +218,7 @@ function announceHitType()
 end
 
 function enemyTurn()
-	announceAttack(g_enemy, enemy.strategy[enemy.currentAttack])
+	announceAttack(enemy.stats.name, enemy.strategy[enemy.currentAttack])
 	calculateDamage(enemy.strategy[enemy.currentAttack], "enemy")
 	attack(enemy, player, enemy.strategy[enemy.currentAttack], -1)
 	timer.performWithDelay(500, announceHitType)
@@ -236,12 +235,12 @@ function calculateDamage(id, attacker)
 	if attacker == "player" then
 		local damage = 0
 
-		playerCharge = playerCharge + attackTypes[id].powerUp
+		playerCharge = math.floor(playerCharge) + attackTypes[id].powerUp
 
 		if playerCharge >= 100 then 
 			playerCharge = 100
 		end
-		if playerCharge <= 0 then playerCharge = 1 end
+		if playerCharge <= 0 then playerCharge = 0.001 end
 
 		if(roll >= attackTypes[id].critRoll)then
 			damage = (attackTypes[id].damage*2)+ player.stats.attack - enemy.stats.defense
@@ -262,10 +261,10 @@ function calculateDamage(id, attacker)
 
 	else
 		local damage = 0
-		enemyCharge = enemyCharge + attackTypes[id].powerUp
+		enemyCharge = math.floor(enemyCharge) + attackTypes[id].powerUp
 
 		if enemyCharge > 100 then enemyCharge = 100 end
-		if enemyCharge <= 0 then enemyCharge = 1 end
+		if enemyCharge <= 0 then enemyCharge = 0.001 end
 
 		if(roll >= attackTypes[id].critRoll)then
 			damage = (attackTypes[id].damage*2)+ enemy.stats.attack - player.stats.defense
