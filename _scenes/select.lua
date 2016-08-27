@@ -2,6 +2,7 @@ local composer = require "composer"
 local widget = require "widget"
 local scene = composer.newScene()
 local scale = 2
+local players = require (data_directory .. ".playerStats")
 
 --local padding = math.round((svw - tiles.width * scale) / 2)
 local players_display = display.newGroup( )
@@ -14,6 +15,7 @@ local selection = 1
 local moved = false
 local numPlayers = 2
 local selected_display = display.newGroup( )
+local stat_display = display.newGroup( )
 local scrollView = nil
 
 -- -----------------------------------------------------------------------------------
@@ -45,8 +47,8 @@ local function scrollListener( event )
 			selection = math.ceil((event.y - y)/button_size)
 			--print(tiles_list[selection].name)
 			if selection <= numPlayers then
-				if selected_display.numChildren > 1 then
-					selected_display[2]:removeSelf( )
+				if selected_display.numChildren > 2 then
+					selected_display[3]:removeSelf( )
 				end
 				players_display[players_display.numChildren]:removeSelf( );
 
@@ -60,11 +62,13 @@ local function scrollListener( event )
 				selection_outline:setStrokeColor( 1, 0, 0 )
 				players_display:insert(selection_outline)
 				selected_string = players_gfx_directory.."player"..selection..".png"
-				local s = display.newImage( 		selected_display,
-													selected_string,
-													selected_display.contentWidth/4,
-													selected_display.contentHeight/2 )
+				local s = display.newImage(
+					selected_string,
+					selected_display.contentWidth/4,
+					selected_display.contentHeight/2 )
+				selected_display:insert(3, s)
 				s:scale(2, 2)
+				createStatBox()
 			end
 
 		end
@@ -125,8 +129,27 @@ function createSelectedDisplay()
 	selected_display.contentWidth = dcw - button_size
 	selected_display.contentHeight = dch
 	selected_display.x = button_size
+	local background = display.newRect( dcw/2, dch/2, dcw, dch )
+	background:setFillColor( 0.5 )
+	selected_display:insert( 1, background )
 end
 
+
+function createStatBox()
+	stat_display:removeSelf( )
+	stat_display = display.newGroup( )
+	local stats = players[selection].playerStats
+	local i= 0
+	for k, v in pairs(stats) do
+		print("here")
+		display.newText( stat_display, k..":", 0, 20*(i), 300, 50, "Pixeled Regular", 14, "left" )
+		display.newText( stat_display, v, 100, 20*(i), 300, 50, "Pixeled Regular", 14, "left" )
+		i = i + 1
+	end
+	stat_display.x = selected_display.contentWidth*3/4
+	stat_display.y = selected_display.contentHeight/2
+	selected_display:insert( 4, stat_display )
+end
 
 
 -- -----------------------------------------------------------------------------------
@@ -150,6 +173,7 @@ function scene:show( event )
 
     if ( phase == "will" ) then
         -- Code here runs when the scene is still off screen (but is about to come on screen)
+
         createSelectedDisplay()
         createScrollView()
         createButton()
