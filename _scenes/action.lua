@@ -31,6 +31,7 @@ function scene:create( event )
 	gameOver = false
 	criticalHit = false
 
+
 	at_options = {
 		text = "",
 		font = "VCR OSD Mono",
@@ -205,6 +206,7 @@ function calculateDamage(id, attacker)
 			enemy.stats.health = 0.001
 		end
 		print(roll, damage)
+
 	else
 		local damage = 0
 		if(roll >= attackTypes[id].critRoll)then
@@ -225,12 +227,18 @@ function calculateDamage(id, attacker)
 	end
 end
 
-
 function win( player )
-	--announcementText:setText( player .. " wins!")
+	announcementText:setText( player .. " wins!")
 	gameOver = true
 	composer.gotoScene(  scenes_directory .. ".win" )
 end
+
+function loss(player)
+		announcementText:setText( "You Lose!")
+		gameOver = true
+		composer.gotoScene(  scenes_directory .. ".win" )
+end
+
 
 function endTurn()
 	announcementText:setText("")
