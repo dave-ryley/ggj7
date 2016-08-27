@@ -38,9 +38,9 @@ function groundPound( obj, attacked, direction )
 
 	local origin = obj.x
 
-    transition.to( obj, { time = 500, y = -450, delta = true, onComplete = function()
-        transition.to( obj, { time = 50, y = 450, delta = true, onComplete = function()
-            transition.to( obj, {time = 300, x = origin } )
+    transition.to( obj, { time = 300, y = -200, delta = true, onComplete = function()
+        transition.to( obj, { time = 50, y = 200, delta = true, onComplete = function()
+            transition.to( obj, {time = 200, x = origin } )
             do_shake_obj( attacked, 5 )
         end } )
     end } )

@@ -6,7 +6,10 @@ local players = {
 			health = 100,
 			maxHealth = 100,
 			level = 0,
-			attack = 4
+			attack = 5,
+
+			dodgeChance = 5,
+			defense = 5
 
 		},
 
@@ -23,7 +26,10 @@ local players = {
 			health = 100,
 			maxHealth = 100,
 			level = 0,
-			attack = 4
+			attack = 4,
+
+			dodgeChance = 1,
+			defense = 6
 
 		},
 

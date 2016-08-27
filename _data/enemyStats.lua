@@ -3,7 +3,9 @@ enemyStats = {
 
 		health = 100,
 		maxHealth = 100,
-		attack = 3,
+		attack = 5,
+		dodgeChance = 5,
+		defense = 5,
 
 	},
 	[ "enemy2" ] = {
@@ -11,6 +13,8 @@ enemyStats = {
 		health = 100,
 		maxHealth = 100,
 		attack = 3,
+		dodgeChance = 5,
+		defense = 5,
 
 	},
 	[ "enemy3" ] = {
@@ -18,6 +22,8 @@ enemyStats = {
 		health = 100,
 		maxHealth = 100,
 		attack = 3,
+		dodgeChance = 5,
+		defense = 5,
 
 	},
 	[ "enemy4" ] = {
@@ -25,6 +31,8 @@ enemyStats = {
 		health = 100,
 		maxHealth = 100,
 		attack = 3,
+		dodgeChance = 5,
+		defense = 5,
 
 	},
 }
