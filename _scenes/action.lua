@@ -29,8 +29,8 @@ function scene:create( event )
 	enemy = spawnEnemy()
 	playerHealth = makeHealthBar(0, g_playerName)
 	enemyHealth = makeHealthBar(1, g_enemy)
-	enemyCharge = 0
-	playerCharge = 0
+	enemyCharge = 1
+	playerCharge = 1
 	backdrop.x = dccx
 	backdrop.y = dccy
 	currentTurn = "player"
@@ -241,7 +241,7 @@ function calculateDamage(id, attacker)
 		if playerCharge >= 100 then 
 			playerCharge = 100
 		end
-		if playerCharge < 0 then playerCharge = 0 end
+		if playerCharge <= 0 then playerCharge = 1 end
 
 		if(roll >= attackTypes[id].critRoll)then
 			damage = (attackTypes[id].damage*2)+ player.stats.attack - enemy.stats.defense
@@ -265,7 +265,7 @@ function calculateDamage(id, attacker)
 		enemyCharge = enemyCharge + attackTypes[id].powerUp
 
 		if enemyCharge > 100 then enemyCharge = 100 end
-		if enemyCharge < 0 then enemyCharge = 0 end
+		if enemyCharge <= 0 then enemyCharge = 1 end
 
 		if(roll >= attackTypes[id].critRoll)then
 			damage = (attackTypes[id].damage*2)+ enemy.stats.attack - player.stats.defense
@@ -307,6 +307,7 @@ end
 
 function endTurn()
 	announcementText:setText("")
+	print("power: " .. playerCharge)
 	transition.scaleTo( playerHealth.bar, { xScale=player.stats.health/player.stats.maxHealth, yScale=1, time=200 } )
 	transition.scaleTo( enemyHealth.bar, { xScale=enemy.stats.health/enemy.stats.maxHealth, yScale=1, time=200 } )
 	transition.scaleTo( playerHealth.power, { xScale=playerCharge/100, yScale=1, time=200 } )
