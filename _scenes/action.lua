@@ -78,7 +78,7 @@ function scene:show( event )
 	-- Add all physics objects
 
 	elseif ( phase == "did" ) then
-		
+
 	-- Called when the scene is now on screen.
 	-- Insert code here to make the scene come alive.
 	-- Example: start timers, begin animation, play audio, etc.
