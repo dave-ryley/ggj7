@@ -14,11 +14,18 @@ end
 -- Scene event functions
 -- -----------------------------------------------------------------------------------
 
+local background
+local title
+
 -- create()
 function scene:create( event )
 
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
+    background = display.newImageRect( sceneGroup, "_gfx/action/backdrops/titleScreen.jpg", dcw, dch )
+    background.x, background.y = dccx, dccy
+    title = display.newImageRect( sceneGroup, "_gfx/ui/title.png", 724, 259 )
+    title.x, title.y = dccx, dccy
 
 end
 
