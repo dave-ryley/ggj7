@@ -6,20 +6,20 @@ local players = require (data_directory .. ".playerStats")
 local bg_num = 1
 local selected_bg = 1
 --local padding = math.round((svw - tiles.width * scale) / 2)
-local players_display = display.newGroup( )
 --local button_size = 170 * scale + padding * 2
 local button_size = 170
 local svw = button_size
-local selection_rect = display.newRect( -500, -500, button_size, button_size )
 local selected_string = ""
 local selection = 1
 local moved = false
 local numPlayers = 3
-local selected_display = display.newGroup( )
-local stat_display = display.newGroup( )
-local scrollView = nil
-local player_selected = false
 
+local selection_rect = nil
+local players_display = nil
+local selected_display = nil
+local stat_display = nil
+
+local scrollView = nil
 -- -----------------------------------------------------------------------------------
 -- Code outside of the scene event functions below will only be executed ONCE unless
 -- the scene is removed entirely (not recycled) via "composer.removeScene()"
@@ -65,6 +65,13 @@ local function handleButtonEvent( event )
     	end
         
     end
+end
+
+local function init()
+	selected_display = display.newGroup( )
+	players_display = display.newGroup( )
+	stat_display = display.newGroup( )
+	selection_rect = display.newRect( -500, -500, button_size, button_size )
 end
 
 local function scrollListener( event )
@@ -181,7 +188,7 @@ local function createScrollView()
 		players_display:insert( p )
 		print("start: ".. start)
 	end
-	players_display:insert( selection_rect)
+	players_display:insert( selection_rect )
 	scrollView:insert(players_display)
 	scrollView:setScrollHeight( start )
 
@@ -234,7 +241,7 @@ function scene:show( event )
 
     if ( phase == "will" ) then
         -- Code here runs when the scene is still off screen (but is about to come on screen)
-
+        init()
         createSelectedDisplay()
         createScrollView()
         createButtons()
@@ -256,7 +263,7 @@ function scene:hide( event )
 		selected_display:removeSelf( )
 		players_display:removeSelf( )
 		scrollView:removeSelf( )
-
+		scene:destroy()
 	elseif ( phase == "did" ) then
 		-- Code here runs immediately after the scene goes entirely off screen
 
