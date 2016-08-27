@@ -10,6 +10,7 @@ utils_directory = "_utils"
 backdrops_gfx_directory = (gfx_directory .. "/action/backdrops/")
 players_gfx_directory = (gfx_directory .. "/action/players/")
 enemies_gfx_directory = (gfx_directory .. "/action/enemies/")
+ui_gfx_directory = (gfx_directory .. "/ui/")
 
 dcw = display.contentWidth
 dch = display.contentHeight
