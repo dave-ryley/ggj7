@@ -15,6 +15,8 @@ function attack( attacker, attacked, attackType, direction )
 	attackAnimation[attackType]( attacker, attacked, direction )
 end
 
+
+
 -- BASIC STRIKE ANIMATIONS
 
 function basicStrike( obj, attacked, direction )
@@ -22,9 +24,10 @@ function basicStrike( obj, attacked, direction )
 
     transition.to( obj, { time = 500, x = 300*direction, delta = true, onComplete = function( )
         transition.to( obj, { time = 50, x = 300*direction, delta = true, onComplete = function( )
-						audio.play(basicAttackSound,{channel = 1,duration = 1000})
+						audio.play(basicAttackSound)
             transition.to( obj, {time = 300, x = origin } )
             do_shake_obj( attacked, 3 )
+						scream()
         end } )
     end } )
 end
@@ -42,6 +45,7 @@ function leapAttack( obj, attacked, direction )
       transition.to( obj, { time = 300, x = returnpoint[1], y = returnpoint[2]})
 			audio.play(basicAttackSound,{channel = 1,duration = 1000})
       do_shake_obj( attacked, 3 )
+			scream()
 		end } )
   end },1 )
 end
@@ -54,6 +58,7 @@ function groundPound( obj, attacked, direction )
         transition.to( obj, { time = 50, y = 200, delta = true, onComplete = function()
             transition.to( obj, {time = 200, x = origin } )
             do_shake_obj( attacked, 5 )
+						scream()
         end } )
     end } )
 end
@@ -62,26 +67,37 @@ function dashAttack( obj, attacked, direction )
 
 	local origin = obj.x
 
-    transition.to( obj, { time = 500, x = 300*direction, delta = true, onComplete = function( )
-        transition.to( obj, { time = 50, x = 300*direction, delta = true, onComplete = function( )
-            transition.to( obj, {time = 300, x = origin } )
+    transition.to( obj, { time = 200, x = 300*direction, delta = true, onComplete = function( )
+        transition.to( obj, { time = 20, x = 300*direction, delta = true, onComplete = function( )
+            transition.to( obj, {time = 200, x = origin } )
             do_shake_obj( attacked, 3 )
+						scream()
         end } )
     end } )
 end
 
 function growthAttack( obj, attacked, direction )
-
 	local origin = obj.x
-
+		grunt = audio.loadSound("_audio/maleGrunt03.ogg")
+		audio.play(grunt)
     transition.scaleTo( obj, { xScale = 1.2,yScale = 1.2,time = 200, onComplete = function( )
-        transition.to( obj, { time = 50, x = 300*direction, delta = true, onComplete = function( )
+			transition.scaleTo(obj,{time = 200,xScale = 1,yScale = 1})
+		end } )
+end
+
+function CHARGE(obj, attacked, direction)
+	local origin = obj.x
+	local lance = display.newImageRect(obj,"_gfx/action/healthbar"..1-direction..".png",300,20)
+		transition.to( obj, { time = 500, x = 300*direction, delta = true, onComplete = function( )
+				transition.to( obj, { time = 50, x = 300*direction, delta = true, onComplete = function( )
+						audio.play(basicAttackSound)
+						transition.to( obj, {time = 300, x = origin } )
 						do_shake_obj( attacked, 3 )
-						transition.to( obj, {time = 300, x = origin, onComplete = function()
-							transition.scaleTo(obj,{time = 200,xScale = 1,yScale = 1})
-						end } )
-        end } )
-    end } )
+						scream()
+						lance:removeSelf()
+						lance = nil
+				end } )
+		end } )
 end
 
 
@@ -89,7 +105,6 @@ function do_shake_obj( obj, count )
     if not count then count = 1 end
 
     if count > 0 then
-				scream()
         shake_obj( obj, function( ) do_shake_obj( obj, count-1 ) end )
     end
 end
@@ -111,5 +126,6 @@ attackAnimation = {
 	["Leap Attack"] = leapAttack,
 	["Ground Pound"] = groundPound,
 	["Dash"] = dashAttack,
-	["Rage"] = growthAttack
+	["Rage"] = growthAttack,
+	["CHARGE"] = CHARGE
 }

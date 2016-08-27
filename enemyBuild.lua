@@ -16,7 +16,7 @@ function spawnEnemy()
 	return enemy
 end
 
--- Function to make a health bar. 
+-- Function to make a health bar.
 -- If input is 0, it makes a health bar for the player, if input is 1 it makes an enemy health bar
 
 function makeHealthBar( playerOrEnemy, name )
