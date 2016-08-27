@@ -1,4 +1,4 @@
-local enemyStats = require (data_directory .. ".playerStats")
+local enemyStats = require (data_directory .. ".enemyStats")
 require (data_directory .. ".enemyStrategies")
 function spawnEnemy()
 	enemy = display.newGroup()

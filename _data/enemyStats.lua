@@ -1,29 +1,59 @@
-enemyStats = {
+local players = {
 	{
+		stats = {
 
-		health = 100,
-		maxHealth = 100,
-		attack = 5,
-		dodgeChance = 5,
-		defense = 5,
+			name = "Knight-achu",
+			health = 100,
+			maxHealth = 100,
+			level = 0,
+			attack = 4,
+			dodgeChance = 4,
+			defense = 3,
 
+		},
+
+		currentAbilities = {
+
+			"Basic Strike",
+			"Leap Attack",
+		}
 	},
 	{
+		stats = {
 
-		health = 100,
-		maxHealth = 100,
-		attack = 100,
-		dodgeChance = 5,
-		defense = 5,
+			name = "Berserk-asaur",
+			health = 100,
+			maxHealth = 100,
+			level = 0,
+			attack = 3,
+			dodgeChance = 1,
+			defense = 6,
 
+		},
+
+		currentAbilities = {
+			"Ground Pound",
+			"Rage",
+		}
 	},
 	{
+		stats = {
 
-		health = 100,
-		maxHealth = 100,
-		attack = 3,
-		dodgeChance = 5,
-		defense = 5,
+			name = "Squire-tle",
+			health = 100,
+			maxHealth = 100,
+			level = 0,
+			attack = 1,
+			dodgeChance = 8,
+			defense = 1
 
+		},
+
+		currentAbilities = {
+
+			"Basic Strike",
+			"Dash",
+		}
 	},
 }
+return players
