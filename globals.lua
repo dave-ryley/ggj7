@@ -22,7 +22,7 @@ g_playerName = "Dave"
 
 -- Action Scene --
 
-g_backdrop = "snowy"
+g_backdrop = 1
 g_player = "player1"
 g_player_number = 1
 g_enemy = "enemy4"
