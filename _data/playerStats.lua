@@ -37,6 +37,26 @@ local players = {
 			"Ground Pound",
 			"Rage",
 		}
+	},
+	{
+		playerStats = {
+
+			name = "player2_test_name",
+			health = 100,
+			maxHealth = 100,
+			level = 0,
+			attack = 10,
+
+			dodgeChance = 1,
+			defense = 6
+
+		},
+
+		currentAbilities = {
+			"Ground Pound",
+			"Rage",
+		}
 	}
+
 }
 return players

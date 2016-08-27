@@ -1,5 +1,4 @@
 local composer = require "composer"
-require "_utils.utils"
 local widget = require "widget"
 local scene = composer.newScene()
 local scale = 2
@@ -15,10 +14,11 @@ local selection_rect = display.newRect( -500, -500, button_size, button_size )
 local selected_string = ""
 local selection = 1
 local moved = false
-local numPlayers = 2
+local numPlayers = 3
 local selected_display = display.newGroup( )
 local stat_display = display.newGroup( )
 local scrollView = nil
+local player_selected = false
 
 -- -----------------------------------------------------------------------------------
 -- Code outside of the scene event functions below will only be executed ONCE unless
@@ -42,8 +42,6 @@ local function handleButtonEvent( event )
 
     if ( "ended" == event.phase ) then
     	local label = event.target:getLabel( )
-    	--print(label)
-    	--print_r(event)
     	if label == "LEFT" then
 			if selected_bg > 1 then
 				selected_bg = selected_bg - 1
@@ -81,11 +79,12 @@ local function scrollListener( event )
 
 			selection = math.ceil((event.y - y)/button_size)
 			--print(tiles_list[selection].name)
+			createStatBox()
 			if selection <= numPlayers then
-				if selected_display.numChildren > 2 then
-					selected_display[3]:removeSelf( )
+				if selected_display.numChildren > 4 then
+					selected_display[5]:removeSelf( )
+					players_display[players_display.numChildren]:removeSelf( )
 				end
-				players_display[players_display.numChildren]:removeSelf( );
 
 				local selection_outline = display.newLine( 	2, (selection - 1) * button_size,
 													button_size - 3, (selection - 1) * button_size,
@@ -95,16 +94,15 @@ local function scrollListener( event )
 
 				selection_outline.strokeWidth = 3
 				selection_outline:setStrokeColor( 1, 0, 0 )
-				players_display:insert(selection_outline)
+				players_display:insert(players_display.numChildren + 1, selection_outline)
 				selected_string = players_gfx_directory.."player"..selection..".png"
 				--Display large selected character sprite/animation
 				local s = display.newImage( 		
 					selected_string, 
 					selected_display.contentWidth*2/11, 
 					selected_display.contentHeight*6/8 )
-				selected_display:insert(3, s)
+				selected_display:insert(5, s)
 				s:scale(1.5, 1.5)
-				createStatBox()
 			end
 
 		end
@@ -142,7 +140,7 @@ local function createButtons()
 	)
 	left_button.x = selected_display.contentWidth*3/8
 	left_button.y = selected_display.contentHeight/8
-	selected_display:insert(5, left_button)
+	selected_display:insert(3, left_button)
 
 	local right_button = widget.newButton(
 		{
@@ -156,7 +154,7 @@ local function createButtons()
 	)
 	right_button.x = selected_display.contentWidth*5/8
 	right_button.y = selected_display.contentHeight/8
-	selected_display:insert(6, right_button)
+	selected_display:insert(4, right_button)
 end
 
 local function createScrollView()
@@ -211,7 +209,7 @@ function createStatBox()
 	end
 	stat_display.x = selected_display.contentWidth*5/7
 	stat_display.y = selected_display.contentHeight*5/6
-	selected_display:insert( 4, stat_display )
+	selected_display:insert( 11, stat_display )
 end
 
 
