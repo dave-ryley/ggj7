@@ -1,4 +1,7 @@
 
+basicAttackSound = audio.loadSound("_audio/Basic Attack.ogg")
+jumpSound = audio.loadSound("_audio/Jump.ogg")
+
 -- All attacks should be under 1000 ms
 function attack( attacker, attacked, attackType, direction )
 	attackAnimation[attackType]( attacker, attacked, direction )
@@ -7,11 +10,11 @@ end
 -- BASIC STRIKE ANIMATIONS
 
 function basicStrike( obj, attacked, direction )
-
 	local origin = obj.x
 
     transition.to( obj, { time = 500, x = 300*direction, delta = true, onComplete = function( )
         transition.to( obj, { time = 50, x = 300*direction, delta = true, onComplete = function( )
+						audio.play(basicAttackSound,{channel = 1,duration = 1000})
             transition.to( obj, {time = 300, x = origin } )
             do_shake_obj( attacked, 3 )
         end } )
@@ -25,10 +28,11 @@ function leapAttack( obj, attacked, direction )
 																{x = obj.x, y = obj.y-100},
 																{x = obj.x+(100*direction), y = obj.y-300},
 																{x = obj.x+(400*direction),y = obj.y-300} })
-
+	audio.play(jumpSound,{channel = 2,duration = 1000})
   transition_curve(obj,curve,{ time = 400, speed = 0.1, onComplete = function()
 		transition.to(obj,{time = 70, x = attacked.x,y = attacked.y,onComplete = function()
       transition.to( obj, { time = 300, x = returnpoint[1], y = returnpoint[2]})
+			audio.play(basicAttackSound,{channel = 1,duration = 1000})
       do_shake_obj( attacked, 3 )
 		end } )
   end },1 )
@@ -62,7 +66,7 @@ function growthAttack( obj, attacked, direction )
 
 	local origin = obj.x
 
-    transition.scaleTo( obj, { xScale = 3,yScale = 3,time = 200, onComplete = function( )
+    transition.scaleTo( obj, { xScale = 1.2,yScale = 1.2,time = 200, onComplete = function( )
         transition.to( obj, { time = 50, x = 300*direction, delta = true, onComplete = function( )
 						do_shake_obj( attacked, 3 )
 						transition.to( obj, {time = 300, x = origin, onComplete = function()

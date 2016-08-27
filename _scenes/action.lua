@@ -220,6 +220,7 @@ end
 function win( player )
 	announcementText:setText( player .. " wins!")
 	gameOver = true
+	composer.gotoScene(  scenes_directory .. ".win" )
 end
 
 function endTurn()
