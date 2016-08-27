@@ -2,7 +2,7 @@ local players = {
 	{
 		playerStats = {
 
-			name = "player/1_test_name",
+			name = "Knight-achu",
 			health = 100,
 			maxHealth = 100,
 			level = 0,
@@ -22,7 +22,7 @@ local players = {
 	{
 		playerStats = {
 
-			name = "player2_test_name",
+			name = "Berserk-asaur",
 			health = 100,
 			maxHealth = 100,
 			level = 0,
@@ -40,7 +40,7 @@ local players = {
 	{
 		playerStats = {
 
-			name = "player3_test_name",
+			name = "Squire-tle",
 			health = 100,
 			maxHealth = 100,
 			level = 0,

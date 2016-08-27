@@ -13,7 +13,7 @@ local selected_string = ""
 local selection = 1
 local moved = false
 local numPlayers = 3
-
+local selected_character = nil
 local selection_rect = nil
 local players_display = nil
 local selected_display = nil
@@ -31,7 +31,7 @@ local function selectBackground()
 	selected_display.x = button_size
 	local background = display.newImageRect(
 			(backdrops_gfx_directory .. "background".. selected_bg .. ".jpg"), 
-			sdcw*1.5, sdch*1.5*3/4 --[[*3/4--]])
+			sdcw*1.5, sdch*1.5 --[[*3/4--]])
 	background.x = sdcw/2
 	background.y = sdch*3/8 --[[/2--]]
 	selected_display:insert( 1, background )
@@ -69,13 +69,54 @@ local function handleButtonGo( event )
 	end
 end
 
-
+local function handleTabBarEvent(event)
+	print("tabbar: "..event.target.id)
+	if event.target.id == "tab1" then
+		createStatBox()
+	else
+		createAbilityBox()
+	end
+end
 
 local function init()
 	selected_display = display.newGroup( )
 	players_display = display.newGroup( )
 	stat_display = display.newGroup( )
 	selection_rect = display.newRect( -500, -500, button_size, button_size )
+end
+
+local function selectPlayer(event)
+	if event then
+		local x, y = event.target:getContentPosition()
+		selection = math.ceil((event.y - y)/button_size)
+	end
+	
+	--print(tiles_list[selection].name)
+	if selection <= numPlayers then
+		if selected_character then
+			selected_character:removeSelf( )
+			players_display[players_display.numChildren]:removeSelf( )
+		end
+
+		local selection_outline = display.newLine( 	2, (selection - 1) * button_size,
+											button_size - 3, (selection - 1) * button_size,
+											button_size - 3, selection * button_size,
+											2, selection * button_size,
+											2, (selection - 1) * button_size)
+
+		selection_outline.strokeWidth = 3
+		selection_outline:setStrokeColor( 1, 0, 0 )
+		players_display:insert(players_display.numChildren + 1, selection_outline)
+		selected_string = players_gfx_directory.."player"..selection..".png"
+		--Display large selected character sprite/animation
+		selected_character = display.newImage( 		
+			selected_string, 
+			selected_display.contentWidth*2/11, 
+			selected_display.contentHeight*6/8 )
+		selected_display:insert( selected_character)
+		createStatBox()
+		selected_character:scale(1.5, 1.5)
+	end
 end
 
 local function scrollListener( event )
@@ -86,35 +127,8 @@ local function scrollListener( event )
 	end
 	if ( phase == "ended") then
 		if not moved then
-			local x, y = event.target:getContentPosition()
 
-			selection = math.ceil((event.y - y)/button_size)
-			--print(tiles_list[selection].name)
-			if selection <= numPlayers then
-				if selected_display.numChildren > 4 then
-					selected_display[5]:removeSelf( )
-					players_display[players_display.numChildren]:removeSelf( )
-				end
-
-				local selection_outline = display.newLine( 	2, (selection - 1) * button_size,
-													button_size - 3, (selection - 1) * button_size,
-													button_size - 3, selection * button_size,
-													2, selection * button_size,
-													2, (selection - 1) * button_size)
-
-				selection_outline.strokeWidth = 3
-				selection_outline:setStrokeColor( 1, 0, 0 )
-				players_display:insert(players_display.numChildren + 1, selection_outline)
-				selected_string = players_gfx_directory.."player"..selection..".png"
-				--Display large selected character sprite/animation
-				local s = display.newImage( 		
-					selected_string, 
-					selected_display.contentWidth*2/11, 
-					selected_display.contentHeight*6/8 )
-				selected_display:insert(5, s)
-				createStatBox()
-				s:scale(1.5, 1.5)
-			end
+			selectPlayer(event)
 
 		end
 
@@ -137,7 +151,7 @@ local function createButtons()
 	)
 	go_button.x = selected_display.contentWidth*3/7
 	go_button.y = selected_display.contentHeight*6/7
-	selected_display:insert(2, go_button)
+	selected_display:insert(go_button)
 
 	local left_button = widget.newButton(
 		{
@@ -151,7 +165,7 @@ local function createButtons()
 	)
 	left_button.x = selected_display.contentWidth*3/8
 	left_button.y = selected_display.contentHeight/8
-	selected_display:insert(3, left_button)
+	selected_display:insert(left_button)
 
 	local right_button = widget.newButton(
 		{
@@ -165,7 +179,7 @@ local function createButtons()
 	)
 	right_button.x = selected_display.contentWidth*5/8
 	right_button.y = selected_display.contentHeight/8
-	selected_display:insert(4, right_button)
+	selected_display:insert( right_button)
 end
 
 local function createScrollView()
@@ -203,21 +217,80 @@ end
 local function createSelectedDisplay()
 	selected_display.contentWidth = dcw - button_size
 	selected_display.contentHeight = dch
+	--[[
+	local tabButtons = {
+		{
+			label = "Stats",
+			id = "tab1",
+			selected = true,
+			onPress = handleTabBarEvent
+		},
+		{
+			label = "Abilities",
+			id = "tab2",
+			onPress = handleTabBarEvent
+		}
+
+	}
+
+	-- Create the widget
+	local tabBar = widget.newTabBar(
+	    {
+	        top = display.contentHeight-120,
+	        width = 300,
+	        buttons = tabButtons
+	    }
+	)
+	tabBar.x = 500
+	tabBar.y = 300
+	--]]
 	selectBackground()
 end
 
+function createAbilityBox()
+	stat_display:removeSelf( )
+	stat_display = display.newGroup( )
+	local abilities = players[selection].currentAbilities
+	for i=1, #abilities do
+		display.newText( stat_display, abilities[i], 0, 20*(i), 300, 50, "Pixeled.ttf", 14, "left" )
+	end
+	stat_display.x = selected_display.contentWidth*5/7
+	stat_display.y = selected_display.contentHeight*9/11
+	selected_display:insert( stat_display )
+end
 
 function createStatBox()
 	stat_display:removeSelf( )
 	stat_display = display.newGroup( )
 	local stats = players[selection].playerStats
 	local i= 0
+
+	--[[
 	for k, v in pairs(stats) do
 		print("here")
 		display.newText( stat_display, k..":", 0, 20*(i), 300, 50, "Pixeled.ttf", 14, "left" )
 		display.newText( stat_display, v, 150, 20*(i), 300, 50, "Pixeled.ttf", 14, "left" )
 		i = i + 1
 	end
+
+	--]]
+	--display health
+	display.newText( stat_display, "Health:", 0, 20*(i), 300, 50, "Pixeled.ttf", 14, "left" )
+	display.newText( stat_display, stats.maxHealth, 150, 20*(i), 300, 50, "Pixeled.ttf", 14, "left" )
+	i = i + 1
+	--display attack
+	display.newText( stat_display, "Attack:", 0, 20*(i), 300, 50, "Pixeled.ttf", 14, "left" )
+	display.newText( stat_display, stats.attack, 150, 20*(i), 300, 50, "Pixeled.ttf", 14, "left" )
+	i = i + 1
+	--display defense
+	display.newText( stat_display, "Defense:", 0, 20*(i), 300, 50, "Pixeled.ttf", 14, "left" )
+	display.newText( stat_display, stats.defense, 150, 20*(i), 300, 50, "Pixeled.ttf", 14, "left" )
+	i = i + 1
+	--display dodge
+	display.newText( stat_display, "Dodge:", 0, 20*(i), 300, 50, "Pixeled.ttf", 14, "left" )
+	display.newText( stat_display, stats.dodgeChance, 150, 20*(i), 300, 50, "Pixeled.ttf", 14, "left" )
+	i = i + 1
+
 	stat_display.x = selected_display.contentWidth*5/7
 	stat_display.y = selected_display.contentHeight*9/11
 	selected_display:insert( stat_display )
@@ -249,6 +322,7 @@ function scene:show( event )
         createSelectedDisplay()
         createScrollView()
         createButtons()
+        selectPlayer()
     elseif ( phase == "did" ) then
         -- Code here runs when the scene is entirely on screen
 
