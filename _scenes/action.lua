@@ -18,6 +18,7 @@ local criticalHit
 local dodged
 local enemyCharge
 local playerCharge
+local chargeButton
 
 -- "scene:create()"
 function scene:create( event )
@@ -28,8 +29,8 @@ function scene:create( event )
 	enemy = spawnEnemy()
 	playerHealth = makeHealthBar(0, g_playerName)
 	enemyHealth = makeHealthBar(1, g_enemy)
-	enemyCharge = 0
-	playerCharge = 0
+	enemyCharge = 1
+	playerCharge = 1
 	backdrop.x = dccx
 	backdrop.y = dccy
 	currentTurn = "player"
@@ -61,6 +62,7 @@ function scene:create( event )
 	local buttons = spawnButtons()
 	scrollView:insert(panel)
 	scrollView:insert(buttons)
+	createChargeButton()
 	transition.scaleTo( playerHealth.power, { xScale=playerCharge/100, yScale=1, time=100 } )
 	transition.scaleTo( enemyHealth.power, { xScale=enemyCharge/100, yScale=1, time=100 } )
 
@@ -136,8 +138,55 @@ local function onKeyPress( event )
 	return false
 end
 
+local function scrollListener( event )
+	local phase = event.phase
+	local direction = event.direction
+
+	return true
+end
+
+function chargeButtonEvent(event)
+	if event.phase == "ended" then
+		playerTurn("CHARGE")
+		hideChargeButton()
+		return true
+	end
+	
+end
+
+function createChargeButton()
+	chargeButton = widget.newButton(
+			{
+				width =  300,
+				height = 100,
+				defaultFile = ui_gfx_directory.."buttons/charge_button1.png",
+				overFile = ui_gfx_directory.."buttons/charge_button2.png",
+				onEvent = chargeButtonEvent
+			}
+		)
+	chargeButton.x = dcw/2
+	chargeButton.y = dch * 3 / 4
+	chargeButton.id = "CHARGE"
+	hideChargeButton()
+end
+
+function showChargeButton()
+	chargeButton.alpha = 1
+	chargeButton:setEnabled(true)
+end
+
+function hideChargeButton()
+	chargeButton.alpha = 0
+	chargeButton:setEnabled( false )
+end
+
 function buttonPress( self, event )
+
 	if event.phase == "began" then
+		print(self.id)
+		--if playerCharge == 100 then 
+		--	hideChargeButton() 
+		--end
 		playerTurn(self.id)
 		return true
 	end
@@ -186,10 +235,13 @@ function calculateDamage(id, attacker)
 
 	if attacker == "player" then
 		local damage = 0
+
 		playerCharge = playerCharge + attackTypes[id].powerUp
 
-		if playerCharge > 100 then playerCharge = 100 end
-		if playerCharge < 0 then playerCharge = 0 end
+		if playerCharge >= 100 then 
+			playerCharge = 100
+		end
+		if playerCharge <= 0 then playerCharge = 1 end
 
 		if(roll >= attackTypes[id].critRoll)then
 			damage = (attackTypes[id].damage*2)+ player.stats.attack - enemy.stats.defense
@@ -213,7 +265,7 @@ function calculateDamage(id, attacker)
 		enemyCharge = enemyCharge + attackTypes[id].powerUp
 
 		if enemyCharge > 100 then enemyCharge = 100 end
-		if enemyCharge < 0 then enemyCharge = 0 end
+		if enemyCharge <= 0 then enemyCharge = 1 end
 
 		if(roll >= attackTypes[id].critRoll)then
 			damage = (attackTypes[id].damage*2)+ enemy.stats.attack - player.stats.defense
@@ -255,6 +307,7 @@ end
 
 function endTurn()
 	announcementText:setText("")
+	print("power: " .. playerCharge)
 	transition.scaleTo( playerHealth.bar, { xScale=player.stats.health/player.stats.maxHealth, yScale=1, time=200 } )
 	transition.scaleTo( enemyHealth.bar, { xScale=enemy.stats.health/enemy.stats.maxHealth, yScale=1, time=200 } )
 	transition.scaleTo( playerHealth.power, { xScale=playerCharge/100, yScale=1, time=200 } )
@@ -269,12 +322,15 @@ function endTurn()
 	else
 		currentTurn = "player"
 		if player.stats.health == 0.001 then
-			loss(g_eplayerName)
+			loss(g_playerName)
 		else
 			transition.to( scrollView, {
 			time = 400,
 			y = 400,
 			delta = true } )
+			if playerCharge == 100 then
+				showChargeButton()
+			end
 		end
 	end
 end
