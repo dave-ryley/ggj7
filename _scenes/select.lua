@@ -137,10 +137,10 @@ local function createButtons()
 
 	local left_button = widget.newButton(
 		{
-			width =  150,
-			height = 50,
-			defaultFile = ui_gfx_directory.."buttons/go_button1.png",
-			overFile = ui_gfx_directory.."buttons/go_button2.png",
+			width =  200,
+			height = 75,
+			defaultFile = ui_gfx_directory.."buttons/left_button1.png",
+			overFile = ui_gfx_directory.."buttons/left_button2.png",
 			label = "LEFT",
 			onEvent = handleButtonEvent
 		}
@@ -151,10 +151,10 @@ local function createButtons()
 
 	local right_button = widget.newButton(
 		{
-			width =  150,
-			height = 50,
-			defaultFile = ui_gfx_directory.."buttons/go_button1.png",
-			overFile = ui_gfx_directory.."buttons/go_button2.png",
+			width =  200,
+			height = 75,
+			defaultFile = ui_gfx_directory.."buttons/right_button1.png",
+			overFile = ui_gfx_directory.."buttons/right_button2.png",
 			label = "RIGHT",
 			onEvent = handleButtonEvent
 		}
