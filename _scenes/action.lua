@@ -142,22 +142,18 @@ function playerTurn( id )
 				attack(player, enemy, id, 1)
 			end
 		end} )
-	if not gameOver then
-		timer.performWithDelay( 1000, endTurn )
-	end
+	timer.performWithDelay( 1000, endTurn )
 end
 
 function enemyTurn()
 	announceAttack(g_enemy, enemy.strategy[enemy.currentAttack])
 	calculateDamage(enemy.strategy[enemy.currentAttack], "enemy")
-	if not gameOver then
-		attack(enemy, player, enemy.strategy[enemy.currentAttack], -1)
-		enemy.currentAttack = enemy.currentAttack + 1
-		if (enemy.currentAttack > #enemy.strategy) then
-			enemy.currentAttack = 1
-		end
-		timer.performWithDelay( 1000, endTurn )
+	attack(enemy, player, enemy.strategy[enemy.currentAttack], -1)
+	enemy.currentAttack = enemy.currentAttack + 1
+	if (enemy.currentAttack > #enemy.strategy) then
+		enemy.currentAttack = 1
 	end
+	timer.performWithDelay( 1000, endTurn )
 end
 
 function calculateDamage(id, attacker)
@@ -168,7 +164,6 @@ function calculateDamage(id, attacker)
 			enemy.stats.health = enemy.stats.health - damage
 		else
 			enemy.stats.health = 0.001
-			win( g_playerName )
 		end
 	else
 		local damage = attackTypes[id].damage*enemy.stats.attack*roll/20
@@ -176,7 +171,6 @@ function calculateDamage(id, attacker)
 			player.stats.health = player.stats.health - damage
 		else
 			player.stats.health = 0.001
-			win( g_enemy )
 		end
 	end
 end
@@ -192,13 +186,21 @@ function endTurn()
 	transition.scaleTo( enemyHealth.bar, { xScale=enemy.stats.health/enemy.stats.maxHealth, yScale=1, time=200 } )
 	if(currentTurn == "player") then
 		currentTurn = "enemy"
-		timer.performWithDelay( 1000, enemyTurn )
+		if enemy.stats.health == 0.001 then
+			win(g_playerName)
+		else
+			timer.performWithDelay( 1000, enemyTurn )
+		end
 	else
 		currentTurn = "player"
-		transition.to( scrollView, { 
-		time = 400, 
-		y = 300, 
-		delta = true } )
+		if player.stats.health == 0.001 then
+			win(g_enemy)
+		else
+			transition.to( scrollView, { 
+			time = 400, 
+			y = 300, 
+			delta = true } )
+		end
 	end
 end
 
