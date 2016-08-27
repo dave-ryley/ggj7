@@ -27,6 +27,7 @@ local function handleButtonEvent( event )
     if ( "ended" == event.phase ) then
         print( "Button was pressed and released" )
         g_player = "player"..selection
+        g_player_number = selection
         composer.gotoScene( scenes_directory .. ".action")
     end
 end
@@ -48,19 +49,21 @@ local function scrollListener( event )
 					selected_display[2]:removeSelf( )
 				end
 				players_display[players_display.numChildren]:removeSelf( );
-				local top_line = display.newLine( 	2, (selection - 1) * button_size,
+
+				local selection_outline = display.newLine( 	2, (selection - 1) * button_size,
 													button_size - 3, (selection - 1) * button_size,
 													button_size - 3, selection * button_size,
 													2, selection * button_size,
 													2, (selection - 1) * button_size)
 
-				top_line.strokeWidth = 3
-				top_line:setStrokeColor( 1, 0, 0 )
-				players_display:insert(top_line)
+				selection_outline.strokeWidth = 3
+				selection_outline:setStrokeColor( 1, 0, 0 )
+				players_display:insert(selection_outline)
 				selected_string = players_gfx_directory.."player"..selection..".png"
+				--Display large selected character sprite/animation
 				local s = display.newImage( 		selected_display, 
 													selected_string, 
-													selected_display.contentWidth/2, 
+													selected_display.contentWidth/4, 
 													selected_display.contentHeight/2 )
 				s:scale(2, 2)
 			end

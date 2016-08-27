@@ -24,4 +24,5 @@ g_playerName = "Bobby"
 
 g_backdrop = "snowy"
 g_player = "player1"
+g_player_number = 1
 g_enemy = "enemy4"
