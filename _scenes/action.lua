@@ -146,9 +146,12 @@ local function scrollListener( event )
 end
 
 function chargeButtonEvent(event)
-	playerTurn("CHARGE")
-	hideChargeButton()
-	return true
+	if event.phase == "ended" then
+		playerTurn("CHARGE")
+		hideChargeButton()
+		return true
+	end
+	
 end
 
 function createChargeButton()
@@ -163,6 +166,7 @@ function createChargeButton()
 		)
 	chargeButton.x = dcw/2
 	chargeButton.y = dch * 3 / 4
+	chargeButton.id = "CHARGE"
 	hideChargeButton()
 end
 
@@ -180,9 +184,9 @@ function buttonPress( self, event )
 
 	if event.phase == "began" then
 		print(self.id)
-		if playerCharge == 100 then 
-			hideChargeButton() 
-		end
+		--if playerCharge == 100 then 
+		--	hideChargeButton() 
+		--end
 		playerTurn(self.id)
 		return true
 	end
