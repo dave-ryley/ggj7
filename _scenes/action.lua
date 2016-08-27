@@ -156,11 +156,23 @@ function calculateDamage(id, attacker)
 	local roll = math.random(20)
 	if attacker == "player" then
 		local damage = attackTypes[id].damage*player.stats.attack*roll/20
-		enemy.stats.health = enemy.stats.health - damage
+		if (enemy.stats.health - damage > 0) then
+			enemy.stats.health = enemy.stats.health - damage
+		else
+			enemy.stats.health = 0.001
+			win(attacker)
+		end
 	else
 		local damage = attackTypes[id].damage*enemy.stats.attack*roll/20
-		player.stats.health = player.stats.health - damage
+		if (player.stats.health - damage > 0) then
+			player.stats.health = player.stats.health - damage
+		else
+			player.stats.health = 0.001
+		end
 	end
+end
+
+function win( player )
 end
 
 function endTurn()
