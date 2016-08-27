@@ -261,7 +261,7 @@ end
 function createStatBox()
 	stat_display:removeSelf( )
 	stat_display = display.newGroup( )
-	local stats = players[selection].playerStats
+	local stats = players[selection].stats
 	local i= 0
 
 	--[[

@@ -1,6 +1,6 @@
 local players = {
 	{
-		playerStats = {
+		stats = {
 
 			name = "Knight-achu",
 			health = 100,
@@ -16,11 +16,10 @@ local players = {
 
 			"Basic Strike",
 			"Leap Attack",
-			"CHARGE"
 		}
 	},
 	{
-		playerStats = {
+		stats = {
 
 			name = "Berserk-asaur",
 			health = 100,
@@ -38,7 +37,7 @@ local players = {
 		}
 	},
 	{
-		playerStats = {
+		stats = {
 
 			name = "Squire-tle",
 			health = 100,
