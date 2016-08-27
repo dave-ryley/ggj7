@@ -17,6 +17,7 @@ local criticalHit
 local dodged
 local enemyCharge
 local playerCharge
+local chargeButton
 
 -- "scene:create()"
 function scene:create( event )
@@ -65,6 +66,7 @@ function scene:create( event )
 
 	local buttons = spawnButtons()
 	scrollView:insert(buttons)
+	createChargeButton()
 	transition.scaleTo( playerHealth.power, { xScale=playerCharge/100, yScale=1, time=100 } )
 	transition.scaleTo( enemyHealth.power, { xScale=enemyCharge/100, yScale=1, time=100 } )
 
@@ -146,8 +148,43 @@ local function scrollListener( event )
 	return true
 end
 
+function chargeButtonEvent(event)
+	playerTurn("CHARGE")
+	hideChargeButton()
+	return true
+end
+
+function createChargeButton()
+	chargeButton = widget.newButton(
+			{
+				width =  300,
+				height = 100,
+				defaultFile = ui_gfx_directory.."buttons/go_button1.png",
+				overFile = ui_gfx_directory.."buttons/go_button2.png",
+				onEvent = chargeButtonEvent
+			}
+		)
+	chargeButton.x = dcw/2
+	chargeButton.y = dch * 3 / 4
+	hideChargeButton()
+end
+
+function showChargeButton()
+	chargeButton.alpha = 1
+	chargeButton:setEnabled(true)
+end
+
+function hideChargeButton()
+	chargeButton.alpha = 0
+	chargeButton:setEnabled( false )
+end
+
 function buttonPress( self, event )
+
 	if event.phase == "began" then
+		if playerCharge == 100 then 
+			hideChargeButton() 
+		end
 		playerTurn(self.id)
 		return true
 	end
@@ -196,15 +233,18 @@ function calculateDamage(id, attacker)
 
 	if attacker == "player" then
 		local damage = 0
+
 		playerCharge = playerCharge + attackTypes[id].powerUp
 
-		if playerCharge > 100 then playerCharge = 100 end
+		if playerCharge >= 100 then 
+			playerCharge = 100
+		end
 		if playerCharge < 0 then playerCharge = 0 end
 
 		if(roll >= attackTypes[id].critRoll)then
 			damage = (attackTypes[id].damage*2)+ player.stats.attack - enemy.stats.defense
 			criticalHit = true
-		elseif(roll <= enemy.stats.dodgeChance )then
+		elseif(roll <= enemy.stats.dodgeChance )thenw
 			damage = (attackTypes[id].damage + player.stats.attack - enemy.stats.defense)/4
 			dodged = true
 		else
@@ -277,12 +317,15 @@ function endTurn()
 	else
 		currentTurn = "player"
 		if player.stats.health == 0.001 then
-			loss(g_eplayerName)
+			loss(g_playerName)
 		else
 			transition.to( scrollView, {
 			time = 400,
 			y = 300,
 			delta = true } )
+			if playerCharge == 100 then
+				showChargeButton()
+			end
 		end
 	end
 end
