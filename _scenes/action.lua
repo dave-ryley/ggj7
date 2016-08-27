@@ -13,6 +13,7 @@ local scrollView
 local at_options
 local announcementText
 local currentTurn
+local gameOver
 
 -- "scene:create()"
 function scene:create( event )
@@ -26,6 +27,7 @@ function scene:create( event )
 	backdrop.x = dccx
 	backdrop.y = dccy
 	currentTurn = "player"
+	gameOver = false
 
 	at_options = {
 		text = "",
@@ -135,8 +137,10 @@ function playerTurn( id )
 		delta = true,
 		onComplete = function()
 			calculateDamage(id, "player")
-			announceAttack(g_playerName, id)
-			attack(player, enemy, id, 1)
+			if not gameOver then
+				announceAttack(g_playerName, id)
+				attack(player, enemy, id, 1)
+			end
 		end} )
 	timer.performWithDelay( 1000, endTurn )
 end
@@ -156,12 +160,25 @@ function calculateDamage(id, attacker)
 	local roll = math.random(20)
 	if attacker == "player" then
 		local damage = attackTypes[id].damage*player.stats.attack*roll/20
-		enemy.stats.health = enemy.stats.health - damage
+		if (enemy.stats.health - damage > 0) then
+			enemy.stats.health = enemy.stats.health - damage
+		else
+			enemy.stats.health = 0.001
+		end
 	else
 		local damage = attackTypes[id].damage*enemy.stats.attack*roll/20
-		player.stats.health = player.stats.health - damage
+		if (player.stats.health - damage > 0) then
+			player.stats.health = player.stats.health - damage
+		else
+			player.stats.health = 0.001
+		end
 	end
 	print(roll,damage)
+end
+
+function win( player )
+	announcementText:setText( player .. " wins!")
+	gameOver = true
 end
 
 function endTurn()
@@ -170,13 +187,21 @@ function endTurn()
 	transition.scaleTo( enemyHealth.bar, { xScale=enemy.stats.health/enemy.stats.maxHealth, yScale=1, time=200 } )
 	if(currentTurn == "player") then
 		currentTurn = "enemy"
-		timer.performWithDelay( 1000, enemyTurn )
+		if enemy.stats.health == 0.001 then
+			win(g_playerName)
+		else
+			timer.performWithDelay( 1000, enemyTurn )
+		end
 	else
 		currentTurn = "player"
-		transition.to( scrollView, {
-		time = 400,
-		y = 300,
-		delta = true } )
+		if player.stats.health == 0.001 then
+			win(g_enemy)
+		else
+			transition.to( scrollView, {
+			time = 400,
+			y = 300,
+			delta = true } )
+		end
 	end
 end
 
