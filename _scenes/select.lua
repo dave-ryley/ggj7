@@ -13,7 +13,7 @@ local selected_string = ""
 local selection = 1
 local moved = false
 local numPlayers = 3
-
+local selected_character = nil
 local selection_rect = nil
 local players_display = nil
 local selected_display = nil
@@ -93,8 +93,8 @@ local function selectPlayer(event)
 	
 	--print(tiles_list[selection].name)
 	if selection <= numPlayers then
-		if selected_display.numChildren > 5 then
-			selected_display[6]:removeSelf( )
+		if selected_character then
+			selected_character:removeSelf( )
 			players_display[players_display.numChildren]:removeSelf( )
 		end
 
@@ -109,13 +109,13 @@ local function selectPlayer(event)
 		players_display:insert(players_display.numChildren + 1, selection_outline)
 		selected_string = players_gfx_directory.."player"..selection..".png"
 		--Display large selected character sprite/animation
-		local s = display.newImage( 		
+		selected_character = display.newImage( 		
 			selected_string, 
 			selected_display.contentWidth*2/11, 
 			selected_display.contentHeight*6/8 )
-		selected_display:insert(6, s)
+		selected_display:insert( selected_character)
 		createStatBox()
-		s:scale(1.5, 1.5)
+		selected_character:scale(1.5, 1.5)
 	end
 end
 
