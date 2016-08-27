@@ -18,12 +18,12 @@ end
 function makeHealthBar( playerOrEnemy, name )
 	healthBar = display.newGroup()
 	healthBar.anchorX = playerOrEnemy
-	hb_bg = display.newImageRect( healthBar, (gfx_directory .. "/action/healthbar" .. playerOrEnemy .. ".png"), 340, 100 )
+	hb_bg = display.newImageRect( healthBar, (gfx_directory .. "/action/healthbar" .. playerOrEnemy .. ".png"), 340, 200 )
 	hb_bg.anchorX = playerOrEnemy
 	options = {}
 	name = display.newText( healthBar, name, 0, -20, 100, 50, "Pixeled Regular", 14, "left" )
 	name.anchorX = playerOrEnemy
-	healthBar.bar = display.newRect( healthBar, 0, 0, 300, 50 )
+	healthBar.bar = display.newRect( healthBar, 0, 0, 300, 29 )
 	healthBar.bar:setFillColor( 0, 1, 0 )
 	healthBar.bar.anchorX = playerOrEnemy
 	if (playerOrEnemy == 1) then
@@ -34,7 +34,7 @@ function makeHealthBar( playerOrEnemy, name )
 		healthBar.bar.x, name.x = 20, 20
 		healthBar.x = 50
 	end
-	healthBar.bar.y = 10
+	healthBar.bar.y = -2
 	healthBar.y = dch - 100
 	healthBar.anchorY = 1
 	return healthBar
