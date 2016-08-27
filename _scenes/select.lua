@@ -3,7 +3,8 @@ local widget = require "widget"
 local scene = composer.newScene()
 local scale = 2
 local players = require (data_directory .. ".playerStats")
-
+local bg_num = 1
+local selected_bg = 1
 --local padding = math.round((svw - tiles.width * scale) / 2)
 local players_display = display.newGroup( )
 --local button_size = 170 * scale + padding * 2
@@ -62,12 +63,13 @@ local function scrollListener( event )
 				selection_outline:setStrokeColor( 1, 0, 0 )
 				players_display:insert(selection_outline)
 				selected_string = players_gfx_directory.."player"..selection..".png"
-				local s = display.newImage(
-					selected_string,
-					selected_display.contentWidth/4,
-					selected_display.contentHeight/2 )
+				--Display large selected character sprite/animation
+				local s = display.newImage( 		
+					selected_string, 
+					selected_display.contentWidth/5 - 50, 
+					selected_display.contentHeight*6/8 )
 				selected_display:insert(3, s)
-				s:scale(2, 2)
+				s:scale(1.5, 1.5)
 				createStatBox()
 			end
 
@@ -82,16 +84,16 @@ end
 local function createButton()
 	local go_button = widget.newButton(
 		{
-			width =  315,
-			height = 116,
+			width =  300,
+			height = 100,
 			defaultFile = ui_gfx_directory.."buttons/go_button1.png",
 			overFile = ui_gfx_directory.."buttons/go_button2.png",
 			label = "GO",
 			onEvent = handleButtonEvent
 		}
 	)
-	go_button.x = dcw/2
-	go_button.y = dch*5/6
+	go_button.x = selected_display.contentWidth*3/7
+	go_button.y = selected_display.contentHeight*6/7
 	selected_display:insert(2, go_button)
 end
 
@@ -125,12 +127,17 @@ local function createScrollView()
 
 end
 
-function createSelectedDisplay()
+local function createSelectedDisplay()
 	selected_display.contentWidth = dcw - button_size
 	selected_display.contentHeight = dch
+	local sdcw = selected_display.contentWidth
+	local sdch = selected_display.contentHeight
 	selected_display.x = button_size
-	local background = display.newRect( dcw/2, dch/2, dcw, dch )
-	background:setFillColor( 0.5 )
+	local background = display.newImageRect(
+			(backdrops_gfx_directory .. "background".. selected_bg .. ".jpg"), 
+			sdcw, sdch*3/4 )
+	background.x = sdcw/2
+	background.y = sdch*3/8
 	selected_display:insert( 1, background )
 end
 
@@ -142,12 +149,12 @@ function createStatBox()
 	local i= 0
 	for k, v in pairs(stats) do
 		print("here")
-		display.newText( stat_display, k..":", 0, 20*(i), 300, 50, "Pixeled Regular", 14, "left" )
-		display.newText( stat_display, v, 100, 20*(i), 300, 50, "Pixeled Regular", 14, "left" )
+		display.newText( stat_display, k..":", 0, 20*(i), 300, 50, "Pixeled.ttf", 14, "left" )
+		display.newText( stat_display, v, 150, 20*(i), 300, 50, "Pixeled.ttf", 14, "left" )
 		i = i + 1
 	end
-	stat_display.x = selected_display.contentWidth*3/4
-	stat_display.y = selected_display.contentHeight/2
+	stat_display.x = selected_display.contentWidth*5/7
+	stat_display.y = selected_display.contentHeight*5/6
 	selected_display:insert( 4, stat_display )
 end
 
