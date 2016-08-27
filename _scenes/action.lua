@@ -93,13 +93,27 @@ function scene:hide( event )
 	-- Insert code here to "pause" the scene.
 	-- Example: stop timers, stop animation, stop audio, etc.
 	elseif ( phase == "did" ) then
+
+	composer.removeScene( scenes_directory .. ".action", false )
 	-- Called immediately after scene goes off screen.
+
 	end
 end
 
 -- "scene:destroy()"
 function scene:destroy( event )
-
+	scrollView:removeSelf( )
+	scrollView = nil
+	backdrop:removeSelf( )
+	backdrop = nil
+	player:removeSelf( )
+	player = nil
+	enemy:removeSelf( )
+	enemy = nil
+	playerHealth:removeSelf( )
+	playerHealth = nil
+	enemyHealth:removeSelf( )
+	enemyHealth = nil
 	local sceneGroup = self.view
 -- Called prior to the removal of scene's view ("sceneGroup").
 -- Insert code here to clean up the scene.
@@ -220,6 +234,7 @@ end
 function win( player )
 	announcementText:setText( player .. " wins!")
 	gameOver = true
+	composer.gotoScene(  scenes_directory .. ".win" )
 end
 
 function endTurn()
