@@ -10,6 +10,7 @@ local backdrop
 local player
 local enemy
 local scrollView
+local panel
 local at_options
 local currentTurn
 local gameOver
@@ -46,20 +47,15 @@ function scene:create( event )
 
 	-- Creating the attack options panel
 
-	scrollView = widget.newScrollView
-	{
-		left = 70,
-		top = 70,
-		width = 500,
-		height = 200,
-		topPadding = 20,
-		bottomPadding = 20,
-		horizontalScrollDisabled = true,
-		verticalScrollDisabled = false,
-		listener = scrollListener,
-	}
+	scrollView = display.newGroup()
+	scrollView.x = 50
+	scrollView.y = 50
+	panel = display.newImageRect( scrollView, "_gfx/ui/panel.png", 456, 224 )
+	panel.x = 200
+	panel.y = 100
 
 	local buttons = spawnButtons()
+	scrollView:insert(panel)
 	scrollView:insert(buttons)
 
 end
@@ -75,6 +71,7 @@ function scene:show( event )
 	-- Add all physics objects
 
 	elseif ( phase == "did" ) then
+		
 	-- Called when the scene is now on screen.
 	-- Insert code here to make the scene come alive.
 	-- Example: start timers, begin animation, play audio, etc.
@@ -133,13 +130,6 @@ local function onKeyPress( event )
 	return false
 end
 
-local function scrollListener( event )
-	local phase = event.phase
-	local direction = event.direction
-
-	return true
-end
-
 function buttonPress( self, event )
 	if event.phase == "began" then
 		playerTurn(self.id)
@@ -150,7 +140,7 @@ end
 function playerTurn( id )
 	transition.to( scrollView, {
 		time = 400,
-		y = -300,
+		y = -400,
 		delta = true,
 		onComplete = function()
 			calculateDamage(id, "player")
@@ -258,7 +248,7 @@ function endTurn()
 		else
 			transition.to( scrollView, {
 			time = 400,
-			y = 300,
+			y = 400,
 			delta = true } )
 		end
 	end

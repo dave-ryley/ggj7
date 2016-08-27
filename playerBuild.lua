@@ -18,7 +18,7 @@ function spawnButtons()
 	for i = 1, #currentAbilities do
 		buttons[currentAbilities[i]] = display.newText( buttons, currentAbilities[i], 0, 50*(i-1), 300, 50, "Pixeled Regular", 14, "left" )
 		buttons[currentAbilities[i]].anchorX = 0
-		buttons[currentAbilities[i]]:setTextColor( 0 )
+		buttons[currentAbilities[i]]:setTextColor( 1 )
 		buttons[currentAbilities[i]].id = currentAbilities[i]
 		buttons[currentAbilities[i]].touch = buttonPress
 		buttons[currentAbilities[i]]:addEventListener( "touch", buttons[currentAbilities[i]] )
