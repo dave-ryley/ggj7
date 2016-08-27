@@ -4,6 +4,12 @@ local scene = composer.newScene()
 local display_group = nil
 
 
+local function handleButtonEvent( event )
+
+    if ( "ended" == event.phase ) then
+		composer.gotoScene( scenes_directory .. ".select")
+    end
+end
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
 -- -----------------------------------------------------------------------------------
@@ -56,9 +62,8 @@ function scene:hide( event )
 
 	if ( phase == "will" ) then
 		-- Code here runs when the scene is on screen (but is about to go off screen)
-		selected_display:removeSelf( )
-		players_display:removeSelf( )
-		scrollView:removeSelf( )
+		display_group:removeSelf( )
+		scene:destroy()
 
 	elseif ( phase == "did" ) then
 		-- Code here runs immediately after the scene goes entirely off screen

@@ -6,6 +6,7 @@ function spawnEnemy()
 	enemy.x = dcw - 300 
 	enemy.y = dch - 300
 	enemy.stats = enemyStats[g_enemy]
+	enemy.stats.health = enemy.stats.maxHealth
 	local roll = math.random(#strategies)
 	enemy.strategy = strategies[roll]
 	enemy.currentAttack = 1

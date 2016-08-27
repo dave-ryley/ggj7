@@ -7,6 +7,7 @@ function spawnPlayer()
 	player.y = dch - 225
 	playerGraphic.anchorY = 1
 	player.stats = players[g_player_number].playerStats
+	player.stats.health = player.stats.maxHealth
 	return player
 end
 

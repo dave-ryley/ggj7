@@ -45,7 +45,7 @@ local players = {
 			health = 100,
 			maxHealth = 100,
 			level = 0,
-			attack = 10,
+			attack = 100,
 
 			dodgeChance = 1,
 			defense = 6
