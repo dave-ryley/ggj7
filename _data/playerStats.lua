@@ -1,6 +1,6 @@
 local players = {
 	{
-		playerStats = {
+		stats = {
 
 			name = "Knight-achu",
 			health = 100,
@@ -19,7 +19,7 @@ local players = {
 		}
 	},
 	{
-		playerStats = {
+		stats = {
 
 			name = "Berserk-asaur",
 			health = 100,
@@ -37,7 +37,7 @@ local players = {
 		}
 	},
 	{
-		playerStats = {
+		stats = {
 
 			name = "Squire-tle",
 			health = 100,
