@@ -110,7 +110,7 @@ local function onKeyPress( event )
 	local keyName = event.keyName
 
 	if (phase == "down") then
-		attack(player, enemy, "basic strike", 1)
+		attack(player, enemy, "Basic Strike", 1)
 	end
 
 	return false

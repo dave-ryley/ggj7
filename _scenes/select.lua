@@ -72,9 +72,9 @@ local function scrollListener( event )
 				s:scale(1.5, 1.5)
 				createStatBox()
 			end
-			
+
 		end
-		
+
 		moved = false
 	end
 	return true
@@ -82,7 +82,7 @@ end
 
 
 local function createButton()
-	local go_button = widget.newButton( 	
+	local go_button = widget.newButton(
 		{
 			width =  300,
 			height = 100,

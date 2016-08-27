@@ -2,7 +2,7 @@ local players = {
 	{
 		playerStats = {
 
-			name = "player1_test_name",
+			name = "player/1_test_name",
 			health = 100,
 			maxHealth = 100,
 			level = 0,
@@ -12,13 +12,8 @@ local players = {
 
 		currentAbilities = {
 
-			"basic strike",
-			"leap attack",
-			"shield",
-			"evade",
-			"vomit",
-			"explode",
-
+			"Basic Strike",
+			"Leap Attack",
 		}
 	},
 	{
@@ -33,15 +28,9 @@ local players = {
 		},
 
 		currentAbilities = {
-
-			"basic strike",
-			"leap attack",
-			"explode",
-
+			"Ground Pound",
+			"Rage",
 		}
 	}
-
-
 }
 return players
-
