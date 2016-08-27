@@ -235,6 +235,7 @@ function calculateDamage(id, attacker)
 end
 
 function win( player )
+	g_win = true
 	winAudio = audio.loadSound("_audio/Win.ogg")
 	audio.play(winAudio)
 	announcementText:setText( player .. " wins!")
@@ -243,6 +244,7 @@ function win( player )
 end
 
 function loss(player)
+		g_win = false
 		lossAudio = audio.loadSound("_audio/Loss.ogg")
 		audio.play(lossAudio)
 		announcementText:setText( "You Lose!")
