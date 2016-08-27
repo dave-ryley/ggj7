@@ -29,8 +29,8 @@ function scene:create( event )
 	enemy = spawnEnemy()
 	playerHealth = makeHealthBar(0, g_playerName)
 	enemyHealth = makeHealthBar(1, g_enemy)
-	enemyCharge = 0
-	playerCharge = 0
+	enemyCharge = 1
+	playerCharge = 1
 	backdrop.x = dccx
 	backdrop.y = dccy
 	currentTurn = "player"
@@ -146,9 +146,12 @@ local function scrollListener( event )
 end
 
 function chargeButtonEvent(event)
-	playerTurn("CHARGE")
-	hideChargeButton()
-	return true
+	if event.phase == "ended" then
+		playerTurn("CHARGE")
+		hideChargeButton()
+		return true
+	end
+	
 end
 
 function createChargeButton()
@@ -163,6 +166,7 @@ function createChargeButton()
 		)
 	chargeButton.x = dcw/2
 	chargeButton.y = dch * 3 / 4
+	chargeButton.id = "CHARGE"
 	hideChargeButton()
 end
 
@@ -180,9 +184,9 @@ function buttonPress( self, event )
 
 	if event.phase == "began" then
 		print(self.id)
-		if playerCharge == 100 then 
-			hideChargeButton() 
-		end
+		--if playerCharge == 100 then 
+		--	hideChargeButton() 
+		--end
 		playerTurn(self.id)
 		return true
 	end
@@ -237,7 +241,7 @@ function calculateDamage(id, attacker)
 		if playerCharge >= 100 then 
 			playerCharge = 100
 		end
-		if playerCharge < 0 then playerCharge = 0 end
+		if playerCharge <= 0 then playerCharge = 1 end
 
 		if(roll >= attackTypes[id].critRoll)then
 			damage = (attackTypes[id].damage*2)+ player.stats.attack - enemy.stats.defense
@@ -261,7 +265,7 @@ function calculateDamage(id, attacker)
 		enemyCharge = enemyCharge + attackTypes[id].powerUp
 
 		if enemyCharge > 100 then enemyCharge = 100 end
-		if enemyCharge < 0 then enemyCharge = 0 end
+		if enemyCharge <= 0 then enemyCharge = 1 end
 
 		if(roll >= attackTypes[id].critRoll)then
 			damage = (attackTypes[id].damage*2)+ enemy.stats.attack - player.stats.defense
@@ -303,6 +307,7 @@ end
 
 function endTurn()
 	announcementText:setText("")
+	print("power: " .. playerCharge)
 	transition.scaleTo( playerHealth.bar, { xScale=player.stats.health/player.stats.maxHealth, yScale=1, time=200 } )
 	transition.scaleTo( enemyHealth.bar, { xScale=enemy.stats.health/enemy.stats.maxHealth, yScale=1, time=200 } )
 	transition.scaleTo( playerHealth.power, { xScale=playerCharge/100, yScale=1, time=200 } )
