@@ -15,6 +15,8 @@ local currentTurn
 local gameOver
 local criticalHit
 local dodged
+local enemyCharge
+local playerCharge
 
 -- "scene:create()"
 function scene:create( event )
@@ -25,6 +27,8 @@ function scene:create( event )
 	enemy = spawnEnemy()
 	playerHealth = makeHealthBar(0, g_playerName)
 	enemyHealth = makeHealthBar(1, g_enemy)
+	enemyCharge = 0
+	playerCharge = 0
 	backdrop.x = dccx
 	backdrop.y = dccy
 	currentTurn = "player"
@@ -61,6 +65,8 @@ function scene:create( event )
 
 	local buttons = spawnButtons()
 	scrollView:insert(buttons)
+	transition.scaleTo( playerHealth.power, { xScale=playerCharge/100, yScale=1, time=100 } )
+	transition.scaleTo( enemyHealth.power, { xScale=enemyCharge/100, yScale=1, time=100 } )
 
 end
 
@@ -189,7 +195,8 @@ function calculateDamage(id, attacker)
 
 	if attacker == "player" then
 		local damage = 0
-
+		playerCharge = playerCharge + attackTypes[id].powerUp
+		if playerCharge > 100 then playerCharge = 100 end
 		if(roll >= attackTypes[id].critRoll)then
 			damage = (attackTypes[id].damage*2)+ player.stats.attack - enemy.stats.defense
 			criticalHit = true
@@ -209,6 +216,8 @@ function calculateDamage(id, attacker)
 
 	else
 		local damage = 0
+		enemyCharge = enemyCharge + attackTypes[id].powerUp
+		if enemyCharge > 100 then enemyCharge = 100 end
 		if(roll >= attackTypes[id].critRoll)then
 			damage = (attackTypes[id].damage*2)+ enemy.stats.attack - player.stats.defense
 			criticalHit = true
@@ -244,6 +253,8 @@ function endTurn()
 	announcementText:setText("")
 	transition.scaleTo( playerHealth.bar, { xScale=player.stats.health/player.stats.maxHealth, yScale=1, time=200 } )
 	transition.scaleTo( enemyHealth.bar, { xScale=enemy.stats.health/enemy.stats.maxHealth, yScale=1, time=200 } )
+	transition.scaleTo( playerHealth.power, { xScale=playerCharge/100, yScale=1, time=200 } )
+	transition.scaleTo( enemyHealth.power, { xScale=enemyCharge/100, yScale=1, time=200 } )
 	if(currentTurn == "player") then
 		currentTurn = "enemy"
 		if enemy.stats.health == 0.001 then
