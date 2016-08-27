@@ -34,6 +34,44 @@ function leapAttack( obj, attacked, direction )
   end },1 )
 end
 
+function groundPound( obj, attacked, direction )
+
+	local origin = obj.x
+
+    transition.to( obj, { time = 500, y = -450, delta = true, onComplete = function()
+        transition.to( obj, { time = 50, y = 450, delta = true, onComplete = function()
+            transition.to( obj, {time = 300, x = origin } )
+            do_shake_obj( attacked, 5 )
+        end } )
+    end } )
+end
+
+function dashAttack( obj, attacked, direction )
+
+	local origin = obj.x
+
+    transition.to( obj, { time = 500, x = 300*direction, delta = true, onComplete = function( )
+        transition.to( obj, { time = 50, x = 300*direction, delta = true, onComplete = function( )
+            transition.to( obj, {time = 300, x = origin } )
+            do_shake_obj( attacked, 3 )
+        end } )
+    end } )
+end
+
+function growthAttack( obj, attacked, direction )
+
+	local origin = obj.x
+
+    transition.scaleTo( obj, { xScale = 3,yScale = 3,time = 200, onComplete = function( )
+        transition.to( obj, { time = 50, x = 300*direction, delta = true, onComplete = function( )
+						do_shake_obj( attacked, 3 )
+						transition.to( obj, {time = 300, x = origin, onComplete = function()
+							transition.scaleTo(obj,{time = 200,xScale = 1,yScale = 1})
+						end } )
+        end } )
+    end } )
+end
+
 
 function do_shake_obj( obj, count )
     if not count then count = 1 end
@@ -56,6 +94,9 @@ end
 
 attackAnimation = {
 	--LEAP ATTACK ANIMATION
-	["basic strike"] = basicStrike,
-	["leap attack"] = leapAttack
+	["Basic Strike"] = basicStrike,
+	["Leap Attack"] = leapAttack,
+	["Ground Pound"] = groundPound,
+	["Dash"] = dashAttack,
+	["Rage"] = growthAttack
 }

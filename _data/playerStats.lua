@@ -10,10 +10,10 @@ playerStats = {
 
 currentAbilities = {
 
-	"basic strike",
-	"leap attack",
-	"shield",
-	"evade",
+	"Basic Strike",
+	"Leap Attack",
+	"Ground Pound",
+	"Rage",
 	"vomit",
 	"explode",
 

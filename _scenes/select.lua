@@ -61,15 +61,15 @@ local function scrollListener( event )
 				top_line:setStrokeColor( 1, 0, 0 )
 				players_display:insert(top_line)
 				selected_string = players_gfx_directory.."player"..selection..".png"
-				local s = display.newImage( 		selected_display, 
-													selected_string, 
-													selected_display.contentWidth/2, 
+				local s = display.newImage( 		selected_display,
+													selected_string,
+													selected_display.contentWidth/2,
 													selected_display.contentHeight/2 )
 				s:scale(2, 2)
 			end
-			
+
 		end
-		
+
 		moved = false
 	end
 	return true
