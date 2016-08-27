@@ -13,6 +13,7 @@ local scrollView
 local at_options
 local announcementText
 local currentTurn
+local gameOver
 
 -- "scene:create()"
 function scene:create( event )
@@ -26,6 +27,7 @@ function scene:create( event )
 	backdrop.x = dccx
 	backdrop.y = dccy
 	currentTurn = "player"
+	gameOver = false
 
 	at_options = {
 		text = "",
@@ -135,8 +137,10 @@ function playerTurn( id )
 		delta = true, 
 		onComplete = function()
 			calculateDamage(id, "player")
-			announceAttack(g_playerName, id)
-			attack(player, enemy, id, 1)
+			if not gameOver then
+				announceAttack(g_playerName, id)
+				attack(player, enemy, id, 1)
+			end
 		end} )
 	timer.performWithDelay( 1000, endTurn )
 end
@@ -160,7 +164,6 @@ function calculateDamage(id, attacker)
 			enemy.stats.health = enemy.stats.health - damage
 		else
 			enemy.stats.health = 0.001
-			win(attacker)
 		end
 	else
 		local damage = attackTypes[id].damage*enemy.stats.attack*roll/20
@@ -173,6 +176,8 @@ function calculateDamage(id, attacker)
 end
 
 function win( player )
+	announcementText:setText( player .. " wins!")
+	gameOver = true
 end
 
 function endTurn()
@@ -181,13 +186,21 @@ function endTurn()
 	transition.scaleTo( enemyHealth.bar, { xScale=enemy.stats.health/enemy.stats.maxHealth, yScale=1, time=200 } )
 	if(currentTurn == "player") then
 		currentTurn = "enemy"
-		timer.performWithDelay( 1000, enemyTurn )
+		if enemy.stats.health == 0.001 then
+			win(g_playerName)
+		else
+			timer.performWithDelay( 1000, enemyTurn )
+		end
 	else
 		currentTurn = "player"
-		transition.to( scrollView, { 
-		time = 400, 
-		y = 300, 
-		delta = true } )
+		if player.stats.health == 0.001 then
+			win(g_enemy)
+		else
+			transition.to( scrollView, { 
+			time = 400, 
+			y = 300, 
+			delta = true } )
+		end
 	end
 end
 

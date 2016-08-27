@@ -4,6 +4,8 @@ function attack( attacker, attacked, attackType, direction )
 	attackAnimation[attackType]( attacker, attacked, direction )
 end
 
+-- BASIC STRIKE ANIMATIONS
+
 function basicStrike( obj, attacked, direction )
 
 	local origin = obj.x
@@ -35,7 +37,9 @@ function shake_obj( obj, onComplete )
     end } )
 end
 
+-- LEAP ATTACK ANIMATION --
+
 attackAnimation = {
 	
-	["basic strike"] = basicStrike
+	["basic strike"] = basicStrike,
 }
