@@ -14,6 +14,8 @@ local at_options
 local announcementText
 local currentTurn
 local gameOver
+local criticalHit
+local dodged
 
 -- "scene:create()"
 function scene:create( event )
@@ -28,6 +30,7 @@ function scene:create( event )
 	backdrop.y = dccy
 	currentTurn = "player"
 	gameOver = false
+	criticalHit = false
 
 	at_options = {
 		text = "",
@@ -140,40 +143,73 @@ function playerTurn( id )
 			if not gameOver then
 				announceAttack(g_playerName, id)
 				attack(player, enemy, id, 1)
+				timer.performWithDelay(500, announceHitType)
 			end
 		end} )
-	timer.performWithDelay( 1000, endTurn )
+	timer.performWithDelay( 1300, endTurn )
+end
+
+function announceHitType()
+	if(criticalHit)then
+		criticalHit = false
+		announcementText:setText("CRITICAL!")
+	elseif(dodged)then
+		announcementText:setText("Dodged!")
+	end
 end
 
 function enemyTurn()
 	announceAttack(g_enemy, enemy.strategy[enemy.currentAttack])
 	calculateDamage(enemy.strategy[enemy.currentAttack], "enemy")
 	attack(enemy, player, enemy.strategy[enemy.currentAttack], -1)
+	timer.performWithDelay(500, announceHitType)
 	enemy.currentAttack = enemy.currentAttack + 1
 	if (enemy.currentAttack > #enemy.strategy) then
 		enemy.currentAttack = 1
 	end
-	timer.performWithDelay( 1000, endTurn )
+	timer.performWithDelay( 1300, endTurn )
 end
 
 function calculateDamage(id, attacker)
 	local roll = math.random(20)
+
 	if attacker == "player" then
-		local damage = attackTypes[id].damage*player.stats.attack*roll/20
+		local damage = 0
+
+		if(roll >= attackTypes[id].critRoll)then
+			damage = (attackTypes[id].damage*2)+ player.stats.attack - enemy.stats.defense
+			criticalHit = true
+		elseif(roll <= enemy.stats.dodgeChance )then
+			damage = (attackTypes[id].damage + player.stats.attack - enemy.stats.defense)/4
+			dodged = true
+		else
+			damage = attackTypes[id].damage + player.stats.attack - enemy.stats.defense
+		end
+
 		if (enemy.stats.health - damage > 0) then
 			enemy.stats.health = enemy.stats.health - damage
 		else
 			enemy.stats.health = 0.001
 		end
+		print(roll, damage)
 	else
-		local damage = attackTypes[id].damage*enemy.stats.attack*roll/20
+		local damage = 0
+		if(roll >= attackTypes[id].critRoll)then
+			damage = (attackTypes[id].damage*2)+ enemy.stats.attack - player.stats.defense
+			criticalHit = true
+		elseif(roll <= player.stats.dodgeChance )then
+			damage = (attackTypes[id].damage + enemy.stats.attack - player.stats.defense)/4
+			dodged = true
+		else
+			damage = attackTypes[id].damage + enemy.stats.attack - player.stats.defense
+		end
 		if (player.stats.health - damage > 0) then
 			player.stats.health = player.stats.health - damage
 		else
 			player.stats.health = 0.001
 		end
+		print(roll, damage)
 	end
-	print(roll,damage)
 end
 
 function win( player )
