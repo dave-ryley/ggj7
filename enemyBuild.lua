@@ -2,7 +2,10 @@ require (data_directory .. ".enemyStats")
 require (data_directory .. ".enemyStrategies")
 function spawnEnemy()
 	enemy = display.newGroup()
-	enemyGraphic = display.newImageRect(enemy, (enemies_gfx_directory .. g_enemy .. ".png"), 170, 170 )
+	math.randomseed( os.time( ) )
+	g_enemy = math.random(g_total_players)
+	print("new enemy: "..g_enemy)
+	enemyGraphic = display.newImageRect(enemy, (enemies_gfx_directory .. "enemy"..g_enemy .. ".png"), 170, 170 )
 	enemy.x = dcw - 300 
 	enemy.y = dch - 300
 	enemy.stats = enemyStats[g_enemy]
@@ -13,7 +16,7 @@ function spawnEnemy()
 	return enemy
 end
 
--- Function to make a health bar. 
+-- Function to make a health bar.
 -- If input is 0, it makes a health bar for the player, if input is 1 it makes an enemy health bar
 
 function makeHealthBar( playerOrEnemy, name )

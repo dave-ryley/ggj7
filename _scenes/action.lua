@@ -16,6 +16,8 @@ local currentTurn
 local gameOver
 local criticalHit
 local dodged
+local enemyCharge
+local playerCharge
 
 -- "scene:create()"
 function scene:create( event )
@@ -26,6 +28,8 @@ function scene:create( event )
 	enemy = spawnEnemy()
 	playerHealth = makeHealthBar(0, g_playerName)
 	enemyHealth = makeHealthBar(1, g_enemy)
+	enemyCharge = 0
+	playerCharge = 0
 	backdrop.x = dccx
 	backdrop.y = dccy
 	currentTurn = "player"
@@ -57,6 +61,8 @@ function scene:create( event )
 	local buttons = spawnButtons()
 	scrollView:insert(panel)
 	scrollView:insert(buttons)
+	transition.scaleTo( playerHealth.power, { xScale=playerCharge/100, yScale=1, time=100 } )
+	transition.scaleTo( enemyHealth.power, { xScale=enemyCharge/100, yScale=1, time=100 } )
 
 end
 
@@ -158,6 +164,7 @@ function announceHitType()
 		criticalHit = false
 		announcementText:setText("CRITICAL!")
 	elseif(dodged)then
+		dodged = false
 		announcementText:setText("Dodged!")
 	end
 end
@@ -179,6 +186,10 @@ function calculateDamage(id, attacker)
 
 	if attacker == "player" then
 		local damage = 0
+		playerCharge = playerCharge + attackTypes[id].powerUp
+
+		if playerCharge > 100 then playerCharge = 100 end
+		if playerCharge < 0 then playerCharge = 0 end
 
 		if(roll >= attackTypes[id].critRoll)then
 			damage = (attackTypes[id].damage*2)+ player.stats.attack - enemy.stats.defense
@@ -189,7 +200,7 @@ function calculateDamage(id, attacker)
 		else
 			damage = attackTypes[id].damage + player.stats.attack - enemy.stats.defense
 		end
-
+		if(damage < 0)then damage = 0 end
 		if (enemy.stats.health - damage > 0) then
 			enemy.stats.health = enemy.stats.health - damage
 		else
@@ -199,6 +210,11 @@ function calculateDamage(id, attacker)
 
 	else
 		local damage = 0
+		enemyCharge = enemyCharge + attackTypes[id].powerUp
+
+		if enemyCharge > 100 then enemyCharge = 100 end
+		if enemyCharge < 0 then enemyCharge = 0 end
+
 		if(roll >= attackTypes[id].critRoll)then
 			damage = (attackTypes[id].damage*2)+ enemy.stats.attack - player.stats.defense
 			criticalHit = true
@@ -208,6 +224,7 @@ function calculateDamage(id, attacker)
 		else
 			damage = attackTypes[id].damage + enemy.stats.attack - player.stats.defense
 		end
+		if(damage < 0)then damage = 0 end
 		if (player.stats.health - damage > 0) then
 			player.stats.health = player.stats.health - damage
 		else
@@ -218,12 +235,16 @@ function calculateDamage(id, attacker)
 end
 
 function win( player )
+	winAudio = audio.loadSound("_audio/Win.ogg")
+	audio.play(winAudio)
 	announcementText:setText( player .. " wins!")
 	gameOver = true
 	composer.gotoScene(  scenes_directory .. ".win" )
 end
 
 function loss(player)
+		lossAudio = audio.loadSound("_audio/Loss.ogg")
+		audio.play(lossAudio)
 		announcementText:setText( "You Lose!")
 		gameOver = true
 		composer.gotoScene(  scenes_directory .. ".win" )
@@ -234,6 +255,8 @@ function endTurn()
 	announcementText:setText("")
 	transition.scaleTo( playerHealth.bar, { xScale=player.stats.health/player.stats.maxHealth, yScale=1, time=200 } )
 	transition.scaleTo( enemyHealth.bar, { xScale=enemy.stats.health/enemy.stats.maxHealth, yScale=1, time=200 } )
+	transition.scaleTo( playerHealth.power, { xScale=playerCharge/100, yScale=1, time=200 } )
+	transition.scaleTo( enemyHealth.power, { xScale=enemyCharge/100, yScale=1, time=200 } )
 	if(currentTurn == "player") then
 		currentTurn = "enemy"
 		if enemy.stats.health == 0.001 then
@@ -244,7 +267,7 @@ function endTurn()
 	else
 		currentTurn = "player"
 		if player.stats.health == 0.001 then
-			win(g_enemy)
+			loss(g_eplayerName)
 		else
 			transition.to( scrollView, {
 			time = 400,

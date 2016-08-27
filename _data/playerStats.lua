@@ -7,15 +7,16 @@ local players = {
 			maxHealth = 100,
 			level = 0,
 			attack = 4,
-			dodgeChance = 5,
-			defense = 5,
+			dodgeChance = 4,
+			defense = 3,
 
 		},
 
 		currentAbilities = {
 
 			"Basic Strike",
-			"Rage",
+			"Leap Attack",
+			"CHARGE"
 		}
 	},
 	{
@@ -25,9 +26,9 @@ local players = {
 			health = 100,
 			maxHealth = 100,
 			level = 0,
-			attack = 4,
-			dodgeChance = 5,
-			defense = 5,
+			attack = 3,
+			dodgeChance = 1,
+			defense = 6,
 
 		},
 
@@ -43,17 +44,16 @@ local players = {
 			health = 100,
 			maxHealth = 100,
 			level = 0,
-			attack = 100,
-
-			dodgeChance = 1,
-			defense = 6
+			attack = 1,
+			dodgeChance = 8,
+			defense = 1
 
 		},
 
 		currentAbilities = {
 
 			"Basic Strike",
-			"Leap Attack",
+			"Dash",
 		}
 	},
 }

@@ -12,7 +12,6 @@ local svw = button_size
 local selected_string = ""
 local selection = 1
 local moved = false
-local numPlayers = 3
 local selected_character = nil
 local selection_rect = nil
 local players_display = nil
@@ -92,7 +91,7 @@ local function selectPlayer(event)
 	end
 	
 	--print(tiles_list[selection].name)
-	if selection <= numPlayers then
+	if selection <= g_total_players then
 		if selected_character then
 			selected_character:removeSelf( )
 			players_display[players_display.numChildren]:removeSelf( )
@@ -198,7 +197,7 @@ local function createScrollView()
 		}
 	)
 	local start = 0
-	for i=1, numPlayers do
+	for i=1, g_total_players do
 
 		local p = display.newImage(players_gfx_directory.."player"..i..".png", button_size/2, start + button_size/2 )
 		--p:scale( scale, scale )
@@ -341,7 +340,8 @@ function scene:hide( event )
 		selected_display:removeSelf( )
 		players_display:removeSelf( )
 		scrollView:removeSelf( )
-		scene:destroy()
+		selected_character:removeSelf( )
+		selected_character = nil
 	elseif ( phase == "did" ) then
 		-- Code here runs immediately after the scene goes entirely off screen
 
