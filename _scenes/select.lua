@@ -31,9 +31,9 @@ local function selectBackground()
 	selected_display.x = button_size
 	local background = display.newImageRect(
 			(backdrops_gfx_directory .. "background".. selected_bg .. ".jpg"), 
-			sdcw*1.5, sdch*1.5 --[[*3/4--]])
+			sdcw*1.5, sdch*1.5*3/4 --[[*3/4--]])
 	background.x = sdcw/2
-	background.y = sdch/2 --[[*3/8--]]
+	background.y = sdch*3/8 --[[/2--]]
 	selected_display:insert( 1, background )
 end
 
@@ -86,7 +86,6 @@ local function scrollListener( event )
 
 			selection = math.ceil((event.y - y)/button_size)
 			--print(tiles_list[selection].name)
-			createStatBox()
 			if selection <= numPlayers then
 				if selected_display.numChildren > 4 then
 					selected_display[5]:removeSelf( )
@@ -109,6 +108,7 @@ local function scrollListener( event )
 					selected_display.contentWidth*2/11, 
 					selected_display.contentHeight*6/8 )
 				selected_display:insert(5, s)
+				createStatBox()
 				s:scale(1.5, 1.5)
 			end
 
@@ -215,8 +215,8 @@ function createStatBox()
 		i = i + 1
 	end
 	stat_display.x = selected_display.contentWidth*5/7
-	stat_display.y = selected_display.contentHeight*5/6
-	selected_display:insert( 11, stat_display )
+	stat_display.y = selected_display.contentHeight*9/11
+	selected_display:insert( stat_display )
 end
 
 
