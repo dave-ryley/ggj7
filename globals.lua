@@ -17,7 +17,7 @@ dccx = display.contentCenterX
 dccy = display.contentCenterY
 
 -- Customization --
-g_playerName = "Bobby"
+g_playerName = "Dave"
 
 -- Action Scene --
 
