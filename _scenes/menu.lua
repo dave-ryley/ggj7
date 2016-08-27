@@ -35,8 +35,8 @@ function scene:show( event )
         --display.newImage( display_group,  string, dcw/2, dch/2, true )
         local button = widget.newButton(
 			{
-				width =  200,
-				height = 50,
+				width =  300,
+				height = 100,
 				defaultFile = ui_gfx_directory.."buttons/go_button1.png",
 				overFile = ui_gfx_directory.."buttons/go_button2.png",
 				label = "Start Game",
