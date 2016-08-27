@@ -13,6 +13,7 @@ local scrollView
 local at_options
 local announcementText
 local currentTurn
+local gameOver
 
 -- "scene:create()"
 function scene:create( event )
@@ -26,6 +27,7 @@ function scene:create( event )
 	backdrop.x = dccx
 	backdrop.y = dccy
 	currentTurn = "player"
+	gameOver = false
 
 	at_options = {
 		text = "",
@@ -135,21 +137,27 @@ function playerTurn( id )
 		delta = true, 
 		onComplete = function()
 			calculateDamage(id, "player")
-			announceAttack(g_playerName, id)
-			attack(player, enemy, id, 1)
+			if not gameOver then
+				announceAttack(g_playerName, id)
+				attack(player, enemy, id, 1)
+			end
 		end} )
-	timer.performWithDelay( 1000, endTurn )
+	if not gameOver then
+		timer.performWithDelay( 1000, endTurn )
+	end
 end
 
 function enemyTurn()
 	announceAttack(g_enemy, enemy.strategy[enemy.currentAttack])
 	calculateDamage(enemy.strategy[enemy.currentAttack], "enemy")
-	attack(enemy, player, enemy.strategy[enemy.currentAttack], -1)
-	enemy.currentAttack = enemy.currentAttack + 1
-	if (enemy.currentAttack > #enemy.strategy) then
-		enemy.currentAttack = 1
+	if not gameOver then
+		attack(enemy, player, enemy.strategy[enemy.currentAttack], -1)
+		enemy.currentAttack = enemy.currentAttack + 1
+		if (enemy.currentAttack > #enemy.strategy) then
+			enemy.currentAttack = 1
+		end
+		timer.performWithDelay( 1000, endTurn )
 	end
-	timer.performWithDelay( 1000, endTurn )
 end
 
 function calculateDamage(id, attacker)
@@ -160,7 +168,7 @@ function calculateDamage(id, attacker)
 			enemy.stats.health = enemy.stats.health - damage
 		else
 			enemy.stats.health = 0.001
-			win(attacker)
+			win( g_playerName )
 		end
 	else
 		local damage = attackTypes[id].damage*enemy.stats.attack*roll/20
@@ -168,11 +176,14 @@ function calculateDamage(id, attacker)
 			player.stats.health = player.stats.health - damage
 		else
 			player.stats.health = 0.001
+			win( g_enemy )
 		end
 	end
 end
 
 function win( player )
+	announcementText:setText( player .. " wins!")
+	gameOver = true
 end
 
 function endTurn()
