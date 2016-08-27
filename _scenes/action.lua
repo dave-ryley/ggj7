@@ -21,7 +21,7 @@ local dodged
 function scene:create( event )
 	local sceneGroup = self.view
 	-- set the background based on the background set in globals
-	backdrop = display.newImageRect((backdrops_gfx_directory .. g_backdrop .. ".jpg"), 1280, 720 )
+	backdrop = display.newImageRect((backdrops_gfx_directory .. "background".. g_backdrop .. ".jpg"), 1280, 720 )
 	player = spawnPlayer()
 	enemy = spawnEnemy()
 	playerHealth = makeHealthBar(0, g_playerName)
