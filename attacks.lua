@@ -2,6 +2,14 @@
 basicAttackSound = audio.loadSound("_audio/Basic Attack.ogg")
 jumpSound = audio.loadSound("_audio/Jump.ogg")
 
+local screams = {}
+for i = 1, 5,1 do
+	screams[i] = audio.loadSound("_audio/ManScream0"..i..".ogg")
+end
+
+function scream()
+	audio.play(screams[math.random(5)])
+end
 -- All attacks should be under 1000 ms
 function attack( attacker, attacked, attackType, direction )
 	attackAnimation[attackType]( attacker, attacked, direction )
@@ -81,6 +89,7 @@ function do_shake_obj( obj, count )
     if not count then count = 1 end
 
     if count > 0 then
+				scream()
         shake_obj( obj, function( ) do_shake_obj( obj, count-1 ) end )
     end
 end

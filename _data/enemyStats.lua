@@ -12,21 +12,12 @@ enemyStats = {
 
 		health = 100,
 		maxHealth = 100,
-		attack = 3,
+		attack = 100,
 		dodgeChance = 5,
 		defense = 5,
 
 	},
 	[ "enemy3" ] = {
-
-		health = 100,
-		maxHealth = 100,
-		attack = 3,
-		dodgeChance = 5,
-		defense = 5,
-
-	},
-	[ "enemy4" ] = {
 
 		health = 100,
 		maxHealth = 100,
