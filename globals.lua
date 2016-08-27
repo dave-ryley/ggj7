@@ -10,6 +10,7 @@ utils_directory = "_utils"
 backdrops_gfx_directory = (gfx_directory .. "/action/backdrops/")
 players_gfx_directory = (gfx_directory .. "/action/players/")
 enemies_gfx_directory = (gfx_directory .. "/action/enemies/")
+ui_gfx_directory = (gfx_directory .. "/ui/")
 
 dcw = display.contentWidth
 dch = display.contentHeight
@@ -17,10 +18,11 @@ dccx = display.contentCenterX
 dccy = display.contentCenterY
 
 -- Customization --
-g_playerName = "Bobby"
+g_playerName = "Dave"
 
 -- Action Scene --
 
 g_backdrop = "snowy"
 g_player = "player1"
+g_player_number = 1
 g_enemy = "enemy4"
