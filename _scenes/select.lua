@@ -38,34 +38,38 @@ local function selectBackground()
 end
 
 
-local function handleButtonEvent( event )
+local function handleButtonLeft( event )
 
     if ( "ended" == event.phase ) then
-    	local label = event.target:getLabel( )
-    	if label == "LEFT" then
-			if selected_bg > 1 then
-				selected_bg = selected_bg - 1
-				selected_display[1]:removeSelf( )
-				selectBackground()
-			end
-    	end
-    	if label == "RIGHT" then
-    		if selected_bg < g_total_backdrops then
-				selected_bg = selected_bg + 1
-				selected_display[1]:removeSelf( )
-				selectBackground()
-			end
-    	end
-    	if label == "GO" then
-			print( "Button was pressed and released" )
-			g_player = "player"..selection
-			g_player_number = selection
-			g_backdrop = selected_bg
-			composer.gotoScene( scenes_directory .. ".action")
-    	end
-        
+		if selected_bg > 1 then
+			selected_bg = selected_bg - 1
+			selected_display[1]:removeSelf( )
+			selectBackground()
+		end
     end
 end
+
+local function handleButtonRight( event )
+	if ( "ended" == event.phase ) then
+		if selected_bg < g_total_backdrops then
+			selected_bg = selected_bg + 1
+			selected_display[1]:removeSelf( )
+			selectBackground()
+		end
+	end
+end
+
+local function handleButtonGo( event )
+	if ( "ended" == event.phase ) then
+		print( "Button was pressed and released" )
+		g_player = "player"..selection
+		g_player_number = selection
+		g_backdrop = selected_bg
+		composer.gotoScene( scenes_directory .. ".action")
+	end
+end
+
+
 
 local function init()
 	selected_display = display.newGroup( )
@@ -127,8 +131,8 @@ local function createButtons()
 			height = 100,
 			defaultFile = ui_gfx_directory.."buttons/go_button1.png",
 			overFile = ui_gfx_directory.."buttons/go_button2.png",
-			label = "GO",
-			onEvent = handleButtonEvent
+			label = "",
+			onEvent = handleButtonGo
 		}
 	)
 	go_button.x = selected_display.contentWidth*3/7
@@ -141,8 +145,8 @@ local function createButtons()
 			height = 75,
 			defaultFile = ui_gfx_directory.."buttons/left_button1.png",
 			overFile = ui_gfx_directory.."buttons/left_button2.png",
-			label = "LEFT",
-			onEvent = handleButtonEvent
+			label = "",
+			onEvent = handleButtonLeft
 		}
 	)
 	left_button.x = selected_display.contentWidth*3/8
@@ -155,8 +159,8 @@ local function createButtons()
 			height = 75,
 			defaultFile = ui_gfx_directory.."buttons/right_button1.png",
 			overFile = ui_gfx_directory.."buttons/right_button2.png",
-			label = "RIGHT",
-			onEvent = handleButtonEvent
+			label = "",
+			onEvent = handleButtonRight
 		}
 	)
 	right_button.x = selected_display.contentWidth*5/8

@@ -43,7 +43,7 @@ function scene:show( event )
 				height = 50,
 				defaultFile = ui_gfx_directory.."buttons/go_button1.png",
 				overFile = ui_gfx_directory.."buttons/go_button2.png",
-				label = "Menu",
+				label = "",
 				onEvent = handleButtonEvent
 			}
 		)
