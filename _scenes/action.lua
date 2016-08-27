@@ -181,6 +181,11 @@ function win( player )
 	gameOver = true
 end
 
+function win( player )
+	announcementText:setText( player .. " wins!")
+	gameOver = true
+end
+
 function endTurn()
 	announcementText:setText("")
 	transition.scaleTo( playerHealth.bar, { xScale=player.stats.health/player.stats.maxHealth, yScale=1, time=200 } )
