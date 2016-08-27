@@ -39,7 +39,7 @@ function leapAttack( obj, attacked, direction )
 																{x = obj.x, y = obj.y-100},
 																{x = obj.x+(100*direction), y = obj.y-300},
 																{x = obj.x+(400*direction),y = obj.y-300} })
-	audio.play(jumpSound,{channel = 2,duration = 1000})
+	audio.play(jumpSound)
   transition_curve(obj,curve,{ time = 400, speed = 0.1, onComplete = function()
 		transition.to(obj,{time = 70, x = attacked.x,y = attacked.y,onComplete = function()
       transition.to( obj, { time = 300, x = returnpoint[1], y = returnpoint[2]})
@@ -53,7 +53,8 @@ end
 function groundPound( obj, attacked, direction )
 
 	local origin = obj.x
-
+		poundSound = audio.loadSound("_audio/GroundPound.ogg")
+		audio.play(poundSound)
     transition.to( obj, { time = 300, y = -200, delta = true, onComplete = function()
         transition.to( obj, { time = 50, y = 200, delta = true, onComplete = function()
             transition.to( obj, {time = 200, x = origin } )
@@ -94,15 +95,16 @@ function CHARGE(obj, attacked, direction)
 	lance.anchorX = direction*-1
 	lance.x = -66*direction
 	lance.y = -56
-
+	CHARGESOUND = audio.loadSound("_audio/CHARGE.ogg")
+	audio.play(CHARGESOUND)
 		transition.to(lance, {time = 200, alpha = 1, onComplete = function()
 			transition.to(lance.fill.effect, {time = 200,intensity = 0 })
 			end } )
 
-		transition.to( obj, { time = 500, x = 300*direction, delta = true, onComplete = function( )
-				transition.to( obj, { time = 50, x = 300*direction, delta = true, onComplete = function( )
+		transition.to( obj, { time = 800, x = -100*direction, delta = true, onComplete = function( )
+				transition.to( obj, { time = 100, x = 800*direction, delta = true, onComplete = function( )
 						audio.play(basicAttackSound)
-						transition.to( obj, {time = 300, x = origin } )
+						transition.to( obj, {time = 200, x = origin } )
 						do_shake_obj( attacked, 3 )
 						scream()
 						lance:removeSelf()

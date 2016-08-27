@@ -16,7 +16,6 @@ local players = {
 
 			"Basic Strike",
 			"Leap Attack",
-			"CHARGE"
 		}
 	},
 	{
