@@ -56,7 +56,7 @@ function scene:create( event )
 
 	local buttons = spawnButtons()
 	scrollView:insert(buttons)
-	
+
 end
 
 -- "scene:show()"
@@ -68,7 +68,7 @@ function scene:show( event )
 	if ( phase == "will" ) then
 	-- Called when the scene is still off screen (but is about to come on screen).
 	-- Add all physics objects
-	
+
 	elseif ( phase == "did" ) then
 	-- Called when the scene is now on screen.
 	-- Insert code here to make the scene come alive.
@@ -129,10 +129,10 @@ function buttonPress( self, event )
 end
 
 function playerTurn( id )
-	transition.to( scrollView, { 
-		time = 400, 
-		y = -300, 
-		delta = true, 
+	transition.to( scrollView, {
+		time = 400,
+		y = -300,
+		delta = true,
 		onComplete = function()
 			calculateDamage(id, "player")
 			announceAttack(g_playerName, id)
@@ -161,6 +161,7 @@ function calculateDamage(id, attacker)
 		local damage = attackTypes[id].damage*enemy.stats.attack*roll/20
 		player.stats.health = player.stats.health - damage
 	end
+	print(roll,damage)
 end
 
 function endTurn()
@@ -172,9 +173,9 @@ function endTurn()
 		timer.performWithDelay( 1000, enemyTurn )
 	else
 		currentTurn = "player"
-		transition.to( scrollView, { 
-		time = 400, 
-		y = 300, 
+		transition.to( scrollView, {
+		time = 400,
+		y = 300,
 		delta = true } )
 	end
 end

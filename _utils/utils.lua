@@ -3,7 +3,7 @@ utils.lua
 
 important variables
 -----------------------------------------]]
-_W                  = display.contentWidth 
+_W                  = display.contentWidth
 _H                  = display.contentHeight
 _XC                 = _W / 2
 _YC                 = _H / 2
@@ -46,7 +46,7 @@ function table_size( tbl )
     for _,v in pairs( tbl ) do
         count = count + 1
     end
-    return count 
+    return count
 end
 
 --[[---------------------------------------
@@ -108,7 +108,7 @@ function array_equivalent( a, b )
     -- Find the start
     local start
     for i = 1, len do
-        if b[ i ] == a[ 1 ] then 
+        if b[ i ] == a[ 1 ] then
             start = i
             break
         end
@@ -127,13 +127,13 @@ function array_equivalent( a, b )
     end
 
     -- If we made it here then the lists match!
-    return true 
+    return true
 
 end
 
 --[[-----------------------------------
 create a text object with a shadow text behind it
-params argument is a normal text object construction argument table 
+params argument is a normal text object construction argument table
 ---------------------------------------]]
 function create_shadowed_text( params )
 
@@ -188,7 +188,7 @@ function create_shadowed_rect( params )
     local rect = display.newRoundedRect( group, 0, 0, params.width, params.height, params.cornerRadius )
     shadow:setFillColor( 0.1, 0.1, 0.1 )
 
-    if params.parent then 
+    if params.parent then
         params.parent:insert( group )
     end
 
@@ -205,7 +205,7 @@ end
 
 --[[---------------------------------------
 random function
-    if there are two args, then a random integer in range [ from, to ] is returned 
+    if there are two args, then a random integer in range [ from, to ] is returned
     if there is one arg, then a random integer in range [ 1, to ] is returned
     if there are no args, then a random real number in range [ 0, 1 ] is returned
 -----------------------------------------]]
@@ -330,7 +330,7 @@ function generate_curve( segNum, anchorPoints )
 
     for j = 1,segNum do
         pathPoints[#pathPoints+1] = { x=0, y=0 }
-    end 
+    end
 
     -- Code added to add the end to the point list
     pathPoints[#pathPoints+1] = anchorPoints[4]
@@ -341,7 +341,7 @@ function generate_curve( segNum, anchorPoints )
         local t1 = 0
         local i = 1
 
-        for j = 1,segNum do 
+        for j = 1,segNum do
 
             t1 = 1.0 - t
             local t1_3 = t1 * t1 * t1
@@ -352,7 +352,7 @@ function generate_curve( segNum, anchorPoints )
             local p2 = anchorPoints[i+1]
             local p3 = anchorPoints[i+2]
             local p4 = anchorPoints[i+3]
-    
+
             local x = t1_3 * p1.x
             x = x + t1_3a * p2.x
             x = x + t1_3b * p3.x
@@ -368,7 +368,7 @@ function generate_curve( segNum, anchorPoints )
             t = t + inc
         end
     end
-    
+
     return pathPoints
 
 end
@@ -409,13 +409,13 @@ IN: obj = the display object to apply the transition to
                 - num  time                 : the total time for the transition to take
                 - num  speed                : the speed at which the object will travel along the path, in pixels per milisecond. Choose either time or speed, not both
                 - bool rotate               : if true, the object will rotate so that facing the direction of travel
-                - bool smoothRotation       : if true, the object will smoothly rotate 
+                - bool smoothRotation       : if true, the object will smoothly rotate
                 - table parent              : a table that gets assigned a reference to the current transition in the field follow_trans
                 - func transition           : an easing function from the easing library, just as in the transition functions
                 - func onComplete           : a function to call when path ends
 --------------------------------------------]]
 function transition_curve( obj, points, params, id )
-    print ("id "..id)
+    --print ("id "..id)
     local nextPoint = 2
 
     local onComplete = nil
@@ -447,21 +447,21 @@ function transition_curve( obj, points, params, id )
         if params.smoothRotation then smoothRotation = params.smoothRotation end
         if params.parent then parent = params.parent end
 
-        if params.transition then easer = params.transition else easer = easing.linear end 
+        if params.transition then easer = params.transition else easer = easing.linear end
 
-        if duration and speed then 
+        if duration and speed then
             segmentDuration = nil
             print( "Cannot specify both time and speed, please choose one or the other. Defaulting to time." )
         end
 
         if not (duration or speed) then
             print( "Must specify either a time or a speed!" )
-            return 
+            return
         end
 
     end
 
-    local dbg_curve = nil 
+    local dbg_curve = nil
     if debug_curves then dbg_curve = draw_curve( points, obj.parent ) end
 
     local function nextTransition( )
@@ -484,10 +484,10 @@ function transition_curve( obj, points, params, id )
                     elapsed_time = elapsed_time + segmentDuration
 
                 --else
-                 --   segmentDuration = duration * points[ nextPoint ].dist / total_distance 
+                 --   segmentDuration = duration * points[ nextPoint ].dist / total_distance
                 end
 
-                
+
             elseif speed then
                segmentDuration = points[ nextPoint ].dist / speed
             end
@@ -503,7 +503,7 @@ function transition_curve( obj, points, params, id )
 
             end
 
-           
+
 
             local follow_trans = transition.to( obj, {
                 tag = id,
@@ -521,16 +521,16 @@ function transition_curve( obj, points, params, id )
 
     end
 
-    
+
 
     nextTransition( )
 
 end
 
 --[[------------------------------------------
-print out an entire table's data 
+print out an entire table's data
 --------------------------------------------]]
-function print_r( t ) 
+function print_r( t )
     local print_r_cache={}
     local function sub_print_r(t,indent)
         if (print_r_cache[tostring(t)]) then
@@ -604,7 +604,7 @@ function log( msg, lvl )
     else
         rslt = lvl .. ": " .. msg
     end
-    
+
     print( rslt )
 end
 
@@ -622,8 +622,8 @@ function change_scene( scene, t, options )
     black.anchorX, black.anchorY = 0,0
     black.alpha = 0
     -- fade to black
-    transition.to( black, { alpha = 1.0, time = t / 2, 
-        onComplete = 
+    transition.to( black, { alpha = 1.0, time = t / 2,
+        onComplete =
             function()
                 -- change scenes instantly
                 local o = {}
@@ -636,12 +636,12 @@ function change_scene( scene, t, options )
                 transition.to( black, { alpha = 0, time = t / 2, onComplete = function() display.remove( black ) end } )
             end } )
 
-    if options and options.block_input then 
-        black:addEventListener( "tap", 
+    if options and options.block_input then
+        black:addEventListener( "tap",
             function( )
                 return true
             end )
-        black:addEventListener( "touch", 
+        black:addEventListener( "touch",
             function( )
                 return true
             end )

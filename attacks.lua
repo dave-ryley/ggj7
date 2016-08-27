@@ -16,6 +16,23 @@ function basicStrike( obj, attacked, direction )
     end } )
 end
 
+function leapAttack( obj, attacked, direction )
+	local returnpoint = {obj.x,obj.y}
+	local curve = generate_curve(8,{
+																{x = obj.x, y = obj.y},
+																{x = obj.x,y = obj.y-300},
+																{x = obj.x, y = obj.y-300},
+																{x = obj.x+(300*direction),y = obj.y-300} })
+
+  transition_curve(obj,curve,{ time = 300, speed = 0.1, onComplete = function()
+		transition.to(obj,{time = 100, x = attacked.x,y = attacked.y,onComplete = function()
+      transition.to( obj, { time = 300, x = returnpoint[1], y = returnpoint[2]})
+      do_shake_obj( attacked, 3 )
+		end } )
+  end },1 )
+end
+
+
 function do_shake_obj( obj, count )
     if not count then count = 1 end
 
@@ -36,6 +53,7 @@ function shake_obj( obj, onComplete )
 end
 
 attackAnimation = {
-	
-	["basic strike"] = basicStrike
+
+	["basic strike"] = basicStrike,
+	["leap attack"] = leapAttack
 }
