@@ -25,7 +25,7 @@ function makeHealthBar( playerOrEnemy, name )
 	hb_bg = display.newImageRect( healthBar, (gfx_directory .. "/action/healthbar" .. playerOrEnemy .. ".png"), 340, 200 )
 	hb_bg.anchorX = playerOrEnemy
 	options = {}
-	name = display.newText( healthBar, name, 0, -20, 100, 50, "Pixeled Regular", 14, "left" )
+	name = display.newText( healthBar, name, 0, -20, 200, 50, "Pixeled Regular", 14, "left" )
 	name.anchorX = playerOrEnemy
 	healthBar.bar = display.newRect( healthBar, 0, 0, 300, 29 )
 	healthBar.bar:setFillColor( 0, 1, 0 )
